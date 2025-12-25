@@ -1,0 +1,19 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+**/.DS_Store
+
+# Virtual environments
+.venv
+
+**/.ipynb_checkpoints
+**/__pycache__
+
+**/*.csv
+**/*.xls
+**/*.xlsx
+**/*.geojson
