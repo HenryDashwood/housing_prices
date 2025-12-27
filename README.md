@@ -1,156 +1,183 @@
-# Rent per Square Metre by Local Authority
+# Urban Economics Replication Pipeline
 
-Pipeline to calculate rent per square metre across England and Wales local authorities, replicating the [YIMBY Alliance analysis](https://yimbyalliance.org/2025/12/18/how-much-space-can-you-afford-to-rent).
+A modular framework for replicating urban economics research on housing constraints and spatial misallocation. This repository hosts datasets and models that can be mixed and matched to replicate various papers and run custom analyses.
+
+## Goal
+
+Quantify how much richer we could be with more liberal planning laws by:
+
+1. Hosting standardised datasets for UK and US housing/labor markets
+2. Implementing reusable analytical models (rent calculation, wage adjustment, spatial equilibrium)
+3. Providing paper replication pipelines that wire datasets to models
 
 ## Project Structure
 
 ```
 housing_prices/
-├── src/                     # Pipeline scripts
-│   ├── config.py            # Paths and configuration
-│   ├── process_epc.py       # EPC data processing
-│   ├── process_pipr.py      # PIPR rental data processing
-│   └── calculate_rent_per_sqm.py  # Main pipeline
+├── src/
+│   ├── datasets/                    # Data ingestion + processing
+│   │   ├── base.py                  # Abstract Dataset class
+│   │   ├── uk/
+│   │   │   ├── epc.py               # Energy Performance Certificates (floor areas)
+│   │   │   ├── pipr.py              # Price Index of Private Rents
+│   │   │   ├── ashe.py              # Annual Survey of Hours and Earnings
+│   │   │   ├── census.py            # Census 2021 demographics
+│   │   │   ├── geography.py         # LA boundaries, TTWA lookups
+│   │   │   └── construction.py      # Construction costs
+│   │   └── us/
+│   │       ├── cbp.py               # County Business Patterns
+│   │       ├── acs.py               # American Community Survey
+│   │       ├── saiz.py              # Housing supply elasticities
+│   │       └── geography.py         # MSA crosswalks
+│   │
+│   ├── models/                      # Reusable analytical models
+│   │   ├── rent_per_sqm.py          # Rent per square metre calculation
+│   │   ├── wage_adjustment.py       # Composition-adjusted wages
+│   │   └── spatial_equilibrium.py   # Hsieh-Moretti framework
+│   │
+│   ├── replications/                # Paper-specific pipelines
+│   │   ├── yimby_rent_map.py        # YIMBY Alliance rent analysis
+│   │   ├── cooped_up.py             # UK GDP cost (McClements 2024)
+│   │   └── hsieh_moretti.py         # US GDP cost (Hsieh-Moretti 2019)
+│   │
+│   └── core/                        # Shared utilities
+│       ├── config.py                # Paths and configuration
+│       ├── download.py              # HTTP download utilities
+│       └── geo.py                   # Geographic code utilities
+│
 ├── data/
-│   ├── raw/                 # Raw input data
-│   │   ├── all-domestic-certificates/  # EPC certificates by LA
-│   │   ├── priceindexofprivaterentsukmonthlypricestatistics6.xlsx
-│   │   └── la_boundaries.geojson
-│   ├── intermediate/        # Processed intermediate files
-│   │   ├── epc_floor_areas.csv
-│   │   └── pipr_rental_prices.csv
-│   └── output/              # Final outputs
-│       ├── rent_per_sqm_by_la.csv
-│       └── rent_per_sqm_for_models.csv
-├── plots/                   # Generated visualisations
-├── notebooks/               # Jupyter notebooks
-│   └── visualise_results.ipynb
-├── plan.md                  # Original project plan
-└── README.md
+│   ├── raw/                         # Downloaded source data
+│   │   ├── uk/                      # UK datasets by source
+│   │   └── us/                      # US datasets by source
+│   ├── processed/                   # Cleaned, analysis-ready data
+│   └── output/                      # Results by replication
+│       ├── yimby_rent_map/
+│       ├── cooped_up/
+│       └── hsieh_moretti/
+│
+├── notebooks/                       # Analysis notebooks
+├── plots/                           # Generated visualisations
+├── tests/                           # Test suite
+└── docs/                            # Documentation
 ```
 
-## Data Sources
+## Architecture
 
-1. **Energy Performance Certificates (EPC)** - Floor area data
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        DATASETS LAYER                            │
+├─────────────────────────────────────────────────────────────────┤
+│  UK: EPC │ PIPR │ ASHE │ Census │ Geography │ Construction      │
+│  US: CBP │ ACS  │ Saiz │ Geography                              │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                         MODELS LAYER                             │
+├─────────────────────────────────────────────────────────────────┤
+│  Rent per sqm  │  Wage Adjustment  │  Spatial Equilibrium       │
+└─────────────────────┬───────────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      REPLICATIONS LAYER                          │
+├─────────────────────────────────────────────────────────────────┤
+│  YIMBY Rent Map  │  Cooped Up (UK)  │  Hsieh-Moretti (US)       │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-   - Source: https://epc.opendatacommunities.org
-   - Download: Bulk download of all domestic certificates (~6GB)
+## Quick Start
 
-2. **Price Index of Private Rents (PIPR)** - Monthly rental prices by LA
-   - Source: https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/priceindexofprivaterentsukmonthlypricestatistics
+### Setup
 
-## Setup
-
-Requires Python 3.13+ and uv. From the parent directory:
+Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 uv sync
 ```
 
-## Data Preparation
+### Running the YIMBY Rent Map Replication
 
-1. Download EPC bulk data and extract to `data/raw/all-domestic-certificates/`
-2. Download PIPR Excel file to `data/raw/priceindexofprivaterentsukmonthlypricestatistics6.xlsx`
-
-## Running the Pipeline
+This is the currently implemented pipeline. It calculates rent per square metre by UK local authority.
 
 ```bash
-cd housing_prices/src
-uv run python calculate_rent_per_sqm.py
+# Run the full pipeline
+uv run python -m src.replications.yimby_rent_map
+
+# Or from Python
+from src.replications.yimby_rent_map import run_pipeline
+result = run_pipeline()
 ```
 
-Or from the parent directory:
+### Data Preparation
 
-```bash
-cd src && uv run python calculate_rent_per_sqm.py
-```
+1. **EPC Data** (required for YIMBY rent map):
 
-## Pipeline Steps
+   - Visit https://epc.opendatacommunities.org/
+   - Register and download all domestic certificates (~6GB)
+   - Extract to `data/raw/uk/epc/`
 
-1. **EPC Processing** (`src/process_epc.py`)
+2. **PIPR Data** (required for YIMBY rent map):
+   - Download from [ONS PIPR page](https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/priceindexofprivaterentsukmonthlypricestatistics)
+   - Save to `data/raw/uk/pipr/`
 
-   - Loads ~28.7M certificates from 347 LA folders
-   - Filters to private rented properties (~5.9M)
-   - Removes implausible floor areas (<10 or >800 sqm)
-   - Filters to last 5 years (~1.7M records)
-   - Maps habitable rooms to bedroom categories (1, 2, 3, 4+)
-   - Calculates median floor area by LA and bedroom count
+## Implemented Features
 
-2. **PIPR Processing** (`src/process_pipr.py`)
+### ✅ Datasets
 
-   - Extracts latest month of rental prices
-   - Filters to local authority level (316 LAs)
-   - Gets rents by bedroom category
+| Dataset              | Country | Status         |
+| -------------------- | ------- | -------------- |
+| EPC (floor areas)    | UK      | ✅ Implemented |
+| PIPR (rental prices) | UK      | ✅ Implemented |
+| LA Boundaries        | UK      | ✅ Implemented |
+| ASHE (wages)         | UK      | 🔲 Stub only   |
+| Census 2021          | UK      | 🔲 Stub only   |
+| Construction costs   | UK      | 🔲 Stub only   |
+| CBP (employment)     | US      | 🔲 Stub only   |
+| ACS (housing)        | US      | 🔲 Stub only   |
+| Saiz elasticities    | US      | 🔲 Stub only   |
 
-3. **Calculation** (`src/calculate_rent_per_sqm.py`)
-   - Joins EPC floor areas with PIPR rents
-   - Calculates `rent_per_sqm = monthly_rent / median_floor_area`
-   - Computes weighted average across bedroom categories
+### ✅ Models
 
-## Visualisation
+| Model               | Status             |
+| ------------------- | ------------------ |
+| Rent per sqm        | ✅ Implemented     |
+| Wage adjustment     | ✅ Framework ready |
+| Spatial equilibrium | ✅ Framework ready |
 
-Run the notebook to generate charts and maps:
+### ✅ Replications
 
-```bash
-uv run jupyter lab notebooks/visualise_results.ipynb
-```
+| Paper                | Status         |
+| -------------------- | -------------- |
+| YIMBY Rent Map       | ✅ Implemented |
+| Cooped Up (2024)     | 🔲 Stub only   |
+| Hsieh-Moretti (2019) | 🔲 Stub only   |
 
-Generates:
-
-- `plots/rent_psqm_distribution.png` - Histogram
-- `plots/rent_psqm_top_bottom.png` - Top/bottom 20 bar charts
-- `plots/rent_psqm_by_bedroom.png` - By bedroom count
-- `plots/rent_psqm_map.png` - Choropleth map
-- `plots/rent_psqm_london.png` - London zoom
-
-## Outputs
-
-### `data/output/rent_per_sqm_by_la.csv`
-
-Full breakdown with 18 columns:
-
-| Column                 | Description                               |
-| ---------------------- | ----------------------------------------- |
-| `la_code`              | ONS local authority code                  |
-| `la_name`              | Local authority name                      |
-| `region`               | Region/country                            |
-| `rent_Xbed`            | Monthly rent for X bedrooms (£)           |
-| `median_sqm_Xbed`      | Median floor area for X bedrooms (sqm)    |
-| `rent_per_sqm_Xbed`    | Rent per sqm for X bedrooms (£/sqm/month) |
-| `overall_rent_per_sqm` | Weighted average (£/sqm/month)            |
-| `n_epc_obs`            | Number of EPC observations                |
-| `data_date`            | PIPR data month                           |
-
-### `data/output/rent_per_sqm_for_models.csv`
-
-Simplified output for economic models:
-
-| Column                 | Description          |
-| ---------------------- | -------------------- |
-| `la_code`              | Local authority code |
-| `la_name`              | Local authority name |
-| `overall_rent_per_sqm` | £/sqm/month          |
-| `log_rent_per_sqm`     | Natural log          |
-| `rent_per_sqm_annual`  | Annualised (×12)     |
-
-## Sample Results
+## Sample Results (YIMBY Rent Map)
 
 | Local Authority        | Rent per sqm (£/month) |
 | ---------------------- | ---------------------- |
-| Westminster            | 52.56                  |
-| Kensington and Chelsea | 51.75                  |
-| Camden                 | 43.79                  |
+| Westminster            | £52.56                 |
+| Kensington and Chelsea | £51.75                 |
+| Camden                 | £43.79                 |
 | ...                    | ...                    |
-| County Durham          | 9.22                   |
-| Powys                  | 9.05                   |
-| Hartlepool             | 8.75                   |
+| County Durham          | £9.22                  |
+| Powys                  | £9.05                  |
+| Hartlepool             | £8.75                  |
 
-## Validation
+## Documentation
 
-Results are ~17% higher than YIMBY published figures (Westminster: £44.60, Hartlepool: £7.50), likely due to more recent data (Nov 2025 vs Dec 2025 article baseline).
+- [DATA_SOURCES.md](docs/DATA_SOURCES.md) - All data sources with download links
+- [REPLICATION_PLAN.md](REPLICATION_PLAN.md) - Detailed implementation plan
 
 ## References
 
-- YIMBY Alliance article: https://yimbyalliance.org/2025/12/18/how-much-space-can-you-afford-to-rent
-- Original code: https://github.com/thicknavyrain/rents_per_sq_ft_uk
-- Interactive map: https://maps.yimbyalliance.org/psqm-rents
+1. **YIMBY Alliance Rent Map** - https://yimbyalliance.org/2025/12/18/how-much-space-can-you-afford-to-rent
+
+2. **Cooped Up** (McClements & Hausenloy, 2024) - Quantifying the Cost of Housing Restrictions. Adam Smith Institute.
+
+3. **Hsieh & Moretti** (2019) - Housing Constraints and Spatial Misallocation. _American Economic Journal: Macroeconomics_, 11(2), 1-39.
+
+## License
+
+MIT

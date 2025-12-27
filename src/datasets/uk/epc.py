@@ -1,10 +1,101 @@
-"""Process EPC data to get median floor area by local authority and bedroom count."""
+"""UK Energy Performance Certificate (EPC) dataset processing.
+
+Provides floor area data by local authority and bedroom count for private rented properties.
+Source: https://epc.opendatacommunities.org/
+"""
 
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 
-from src.config import EPC_AGGREGATED_FILE, EPC_DIR
+from src.core.config import processed_path as get_processed_path
+from src.core.config import raw_path
+from src.datasets.base import Dataset
+
+
+class EPCDataset(Dataset):
+    """
+    UK Energy Performance Certificate dataset.
+
+    Provides median floor area by local authority and bedroom category
+    for private rented properties.
+    """
+
+    name = "epc"
+    country = "uk"
+
+    def download(self, output_dir: Path | None = None, **kwargs: Any) -> Path:
+        """
+        EPC data requires manual bulk download from the Open Data Communities portal.
+
+        Instructions:
+        1. Visit https://epc.opendatacommunities.org/
+        2. Register for an account
+        3. Download all domestic certificates (bulk download ~6GB)
+        4. Extract to data/raw/uk/epc/
+
+        Args:
+            output_dir: Directory to save downloaded files (unused for manual download)
+
+        Returns:
+            Path to expected download location
+
+        Raises:
+            NotImplementedError: EPC data requires manual download
+        """
+        target_dir = output_dir or raw_path("uk", "epc")
+        raise NotImplementedError(
+            f"EPC data requires manual download.\n"
+            f"1. Visit https://epc.opendatacommunities.org/\n"
+            f"2. Register and download all domestic certificates\n"
+            f"3. Extract to {target_dir}"
+        )
+
+    def process(
+        self,
+        raw_path: Path | None = None,
+        output_path: Path | None = None,
+        **kwargs: Any,
+    ) -> pd.DataFrame:
+        """
+        Process EPC data to get median floor area by LA and bedroom count.
+
+        Args:
+            raw_path: Path to extracted EPC certificates directory
+            output_path: Path to save processed data
+            **kwargs: Additional processing options
+
+        Returns:
+            DataFrame with median floor areas by LA and bedroom category
+        """
+        from src.core.config import raw_path as get_raw_path
+
+        epc_dir = raw_path or get_raw_path("uk", "epc")
+        result = process_epc_data(epc_dir)
+
+        if output_path:
+            output_path = Path(output_path)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            result.to_csv(output_path, index=False)
+            print(f"Saved to {output_path}")
+
+        return result
+
+    def load(self, path: Path | None = None) -> pd.DataFrame:
+        """
+        Load processed EPC floor area data.
+
+        Args:
+            path: Path to processed CSV file
+
+        Returns:
+            DataFrame with floor area data
+        """
+        from src.core.config import INTERMEDIATE_DIR
+
+        path = path or INTERMEDIATE_DIR / "epc_floor_areas.csv"
+        return pd.read_csv(path)
 
 
 def load_all_epc_certificates(epc_dir: Path) -> pd.DataFrame:
@@ -69,7 +160,7 @@ def clean_and_filter_epc(df: pd.DataFrame) -> pd.DataFrame:
     valid_area["bedrooms"] = (valid_area["NUMBER_HABITABLE_ROOMS"] - 1).clip(lower=1)
 
     # Create bedroom category matching PIPR categories
-    def bedroom_category(beds):
+    def bedroom_category(beds: float) -> str:
         if beds <= 1:
             return "1"
         elif beds == 2:
@@ -125,14 +216,27 @@ def aggregate_floor_area(df: pd.DataFrame) -> pd.DataFrame:
     return pivot
 
 
-def process_epc_data() -> pd.DataFrame:
-    """Main function to process EPC data."""
+def process_epc_data(epc_dir: Path | None = None) -> pd.DataFrame:
+    """
+    Main function to process EPC data.
+
+    Args:
+        epc_dir: Path to EPC certificates directory
+
+    Returns:
+        DataFrame with median floor areas by LA and bedroom category
+    """
+    from src.core.config import raw_path
+
+    if epc_dir is None:
+        epc_dir = raw_path("uk", "epc")
+
     print("=" * 60)
     print("Processing EPC Data")
     print("=" * 60)
 
     # Load all certificates
-    raw = load_all_epc_certificates(EPC_DIR)
+    raw = load_all_epc_certificates(epc_dir)
 
     # Clean and filter
     cleaned = clean_and_filter_epc(raw)
@@ -143,11 +247,19 @@ def process_epc_data() -> pd.DataFrame:
     return aggregated
 
 
+# Module-level instance for convenience
+epc_dataset = EPCDataset()
+
+
 if __name__ == "__main__":
+    from src.core.config import INTERMEDIATE_DIR
+
     result = process_epc_data()
 
     # Save intermediate output
-    result.to_csv(EPC_AGGREGATED_FILE, index=False)
-    print(f"\nSaved to {EPC_AGGREGATED_FILE}")
+    output_file = INTERMEDIATE_DIR / "epc_floor_areas.csv"
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    result.to_csv(output_file, index=False)
+    print(f"\nSaved to {output_file}")
     print("\nSample output:")
     print(result.head(10).to_string())
