@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Housing supply functions, elasticity, and equilibrium rent determination">
+
+<title>src - Housing Supply</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="src - Housing Supply">
+<meta property="og:description" content="Housing supply functions, elasticity, and equilibrium rent determination">
+<meta property="og:site_name" content="src">
+<meta name="twitter:title" content="src - Housing Supply">
+<meta name="twitter:description" content="Housing supply functions, elasticity, and equilibrium rent determination">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">src</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./parameters.html">Model Components</a></li><li class="breadcrumb-item"><a href="./housing.html">Housing Supply</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Overview</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Core Utilities</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Model Components</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./parameters.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Parameters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./utility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Worker Utility</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./housing.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Housing Supply</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./production.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Firm Production</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Equilibrium</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./equilibrium.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Equilibrium Solver</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model API</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#where-do-rents-come-from" id="toc-where-do-rents-come-from" class="nav-link active" data-scroll-target="#where-do-rents-come-from">Where Do Rents Come From?</a></li>
+  <li><a href="#the-housing-supply-function" id="toc-the-housing-supply-function" class="nav-link" data-scroll-target="#the-housing-supply-function">The Housing Supply Function</a>
+  <ul class="collapse">
+  <li><a href="#what-is-supply-elasticity" id="toc-what-is-supply-elasticity" class="nav-link" data-scroll-target="#what-is-supply-elasticity">What is Supply Elasticity?</a></li>
+  </ul></li>
+  <li><a href="#equilibrium-rent" id="toc-equilibrium-rent" class="nav-link" data-scroll-target="#equilibrium-rent">Equilibrium Rent</a>
+  <ul class="collapse">
+  <li><a href="#rent_elasticity_with_respect_to_population" id="toc-rent_elasticity_with_respect_to_population" class="nav-link" data-scroll-target="#rent_elasticity_with_respect_to_population">rent_elasticity_with_respect_to_population</a></li>
+  <li><a href="#equilibrium_rent" id="toc-equilibrium_rent" class="nav-link" data-scroll-target="#equilibrium_rent">equilibrium_rent</a></li>
+  <li><a href="#housing_supply" id="toc-housing_supply" class="nav-link" data-scroll-target="#housing_supply">housing_supply</a></li>
+  </ul></li>
+  <li><a href="#the-power-of-elasticity" id="toc-the-power-of-elasticity" class="nav-link" data-scroll-target="#the-power-of-elasticity">The Power of Elasticity</a></li>
+  <li><a href="#rent-elasticity" id="toc-rent-elasticity" class="nav-link" data-scroll-target="#rent-elasticity">Rent Elasticity</a></li>
+  <li><a href="#tests" id="toc-tests" class="nav-link" data-scroll-target="#tests">Tests</a></li>
+  <li><a href="#visualizing-supply-curves" id="toc-visualizing-supply-curves" class="nav-link" data-scroll-target="#visualizing-supply-curves">Visualizing Supply Curves</a></li>
+  <li><a href="#key-insights" id="toc-key-insights" class="nav-link" data-scroll-target="#key-insights">Key Insights</a>
+  <ul class="collapse">
+  <li><a href="#why-this-matters-for-policy" id="toc-why-this-matters-for-policy" class="nav-link" data-scroll-target="#why-this-matters-for-policy">Why This Matters for Policy</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/henrydashwood/housing_prices/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="housing.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./parameters.html">Model Components</a></li><li class="breadcrumb-item"><a href="./housing.html">Housing Supply</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Housing Supply</h1>
+</div>
+
+<div>
+  <div class="description">
+    Housing supply functions, elasticity, and equilibrium rent determination
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="where-do-rents-come-from" class="level2">
+<h2 class="anchored" data-anchor-id="where-do-rents-come-from">Where Do Rents Come From?</h2>
+<p>In the Rosen-Roback model, rents are determined by the <strong>housing market</strong>. Supply meets demand:</p>
+<ul>
+<li><strong>Supply</strong>: Developers build housing when rents are high</li>
+<li><strong>Demand</strong>: Workers need housing (assume 1 unit per worker)</li>
+<li><strong>Equilibrium</strong>: Housing supply = Housing demand (= population)</li>
+</ul>
+</section>
+<section id="the-housing-supply-function" class="level2">
+<h2 class="anchored" data-anchor-id="the-housing-supply-function">The Housing Supply Function</h2>
+<p>Housing supply responds to rents:</p>
+<p><span class="math display">\[H = S \cdot r^{\gamma}\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(H\)</span> = housing units supplied</li>
+<li><span class="math inline">\(S\)</span> = supply shifter (land availability, construction costs)</li>
+<li><span class="math inline">\(r\)</span> = rent</li>
+<li><span class="math inline">\(\gamma\)</span> = <strong>supply elasticity</strong></li>
+</ul>
+<section id="what-is-supply-elasticity" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-supply-elasticity">What is Supply Elasticity?</h3>
+<p>The elasticity <span class="math inline">\(\gamma\)</span> measures how responsive supply is to price:</p>
+<p><span class="math display">\[\gamma = \frac{\% \Delta H}{\% \Delta r}\]</span></p>
+<p><strong>Examples</strong> (from Saiz 2010):</p>
+<ul>
+<li><strong>Houston</strong>: <span class="math inline">\(\gamma \approx 2.5\)</span> (very elastic - flat land, few regulations)</li>
+<li><strong>Chicago</strong>: <span class="math inline">\(\gamma \approx 1.1\)</span> (moderate)</li>
+<li><strong>Los Angeles</strong>: <span class="math inline">\(\gamma \approx 0.76\)</span> (inelastic - geography + regulations)</li>
+<li><strong>San Francisco</strong>: <span class="math inline">\(\gamma \approx 0.66\)</span> (very inelastic - peninsula + strict zoning)</li>
+</ul>
+<p><strong>Why does elasticity vary?</strong></p>
+<ul>
+<li>Geography: mountains, water bodies limit building</li>
+<li>Regulations: zoning, height limits, environmental reviews</li>
+<li>Land availability: room to sprawl vs.&nbsp;built-up</li>
+</ul>
+</section>
+</section>
+<section id="equilibrium-rent" class="level2">
+<h2 class="anchored" data-anchor-id="equilibrium-rent">Equilibrium Rent</h2>
+<p>In equilibrium, housing supply equals population:</p>
+<p><span class="math display">\[H = L\]</span></p>
+<p>Solving for rent:</p>
+<p><span class="math display">\[r = \left(\frac{L}{S}\right)^{1/\gamma}\]</span></p>
+<p><strong>Key insight</strong>: When supply is inelastic (low <span class="math inline">\(\gamma\)</span>), the exponent <span class="math inline">\(1/\gamma\)</span> is large, so rent increases sharply with population.</p>
+<hr>
+<section id="rent_elasticity_with_respect_to_population" class="level3">
+<h3 class="anchored" data-anchor-id="rent_elasticity_with_respect_to_population">rent_elasticity_with_respect_to_population</h3>
+<blockquote class="blockquote">
+<pre><code> rent_elasticity_with_respect_to_population (population:float,
+                                             supply_shifter:float,
+                                             elasticity:float)</code></pre>
+</blockquote>
+<p><em>Calculate the elasticity of rent with respect to population.</em></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>population</td>
+<td>float</td>
+<td>Current population</td>
+</tr>
+<tr class="even">
+<td>supply_shifter</td>
+<td>float</td>
+<td>Supply shifter parameter</td>
+</tr>
+<tr class="odd">
+<td>elasticity</td>
+<td>float</td>
+<td>Supply elasticity (gamma)</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>float</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="equilibrium_rent" class="level3">
+<h3 class="anchored" data-anchor-id="equilibrium_rent">equilibrium_rent</h3>
+<blockquote class="blockquote">
+<pre><code> equilibrium_rent (population:float, supply_shifter:float,
+                   elasticity:float)</code></pre>
+</blockquote>
+<p><em>Calculate equilibrium rent where housing supply equals population.</em></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>population</td>
+<td>float</td>
+<td>City population (= housing demand)</td>
+</tr>
+<tr class="even">
+<td>supply_shifter</td>
+<td>float</td>
+<td>Supply shifter parameter (S)</td>
+</tr>
+<tr class="odd">
+<td>elasticity</td>
+<td>float</td>
+<td>Supply elasticity (gamma)</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>float</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="housing_supply" class="level3">
+<h3 class="anchored" data-anchor-id="housing_supply">housing_supply</h3>
+<blockquote class="blockquote">
+<pre><code> housing_supply (rent:float, supply_shifter:float, elasticity:float)</code></pre>
+</blockquote>
+<p><em>Calculate housing supply given rent and supply parameters.</em></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>rent</td>
+<td>float</td>
+<td>Housing rent</td>
+</tr>
+<tr class="even">
+<td>supply_shifter</td>
+<td>float</td>
+<td>Supply shifter parameter (S)</td>
+</tr>
+<tr class="odd">
+<td>elasticity</td>
+<td>float</td>
+<td>Supply elasticity (gamma)</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>float</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<div id="cell-7" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate housing supply at a given rent</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> housing_supply(rent<span class="op">=</span><span class="dv">100</span>, supply_shifter<span class="op">=</span><span class="dv">1000</span>, elasticity<span class="op">=</span><span class="fl">2.0</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> h <span class="op">==</span> <span class="dv">1000</span> <span class="op">*</span> (<span class="dv">100</span><span class="op">**</span><span class="fl">2.0</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate equilibrium rent where supply equals 1M population</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> equilibrium_rent(population<span class="op">=</span><span class="dv">1_000_000</span>, supply_shifter<span class="op">=</span><span class="dv">1_000_000</span>, elasticity<span class="op">=</span><span class="fl">2.0</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(r, <span class="fl">1.0</span>)  <span class="co"># Should be 1 when pop = shifter</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify equilibrium condition: H = L</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>h_eq <span class="op">=</span> housing_supply(r, <span class="dv">1_000_000</span>, <span class="fl">2.0</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(h_eq, <span class="dv">1_000_000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="the-power-of-elasticity" class="level2">
+<h2 class="anchored" data-anchor-id="the-power-of-elasticity">The Power of Elasticity</h2>
+<p>Let’s see how different supply elasticities affect the rent response to population growth.</p>
+<div id="cell-9" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare rent response across cities with different elasticities</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>supply_shifter <span class="op">=</span> <span class="dv">1_000_000</span>  <span class="co"># Calibrated so rent ≈ 1 at 1M population with gamma=2</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>base_population <span class="op">=</span> <span class="dv">1_000_000</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>new_population <span class="op">=</span> <span class="dv">1_500_000</span>  <span class="co"># 50% population growth</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Empirical elasticities from Saiz (2010)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>cities <span class="op">=</span> [</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Houston"</span>, <span class="fl">2.55</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Austin"</span>, <span class="fl">1.63</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Chicago"</span>, <span class="fl">1.12</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Los Angeles"</span>, <span class="fl">0.76</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"San Francisco"</span>, <span class="fl">0.66</span>),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Effect of 50% Population Growth on Rents"</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'City'</span><span class="sc">:&lt;20}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Elasticity (γ)'</span><span class="sc">:&gt;15}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Initial Rent'</span><span class="sc">:&gt;12}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'New Rent'</span><span class="sc">:&gt;12}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'% Increase'</span><span class="sc">:&gt;12}</span><span class="ss">"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city_name, gamma <span class="kw">in</span> cities:</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    initial_rent <span class="op">=</span> equilibrium_rent(base_population, supply_shifter, gamma)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    new_rent <span class="op">=</span> equilibrium_rent(new_population, supply_shifter, gamma)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    pct_increase <span class="op">=</span> (new_rent <span class="op">/</span> initial_rent <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>city_name<span class="sc">:&lt;20}</span><span class="ss"> </span><span class="sc">{</span>gamma<span class="sc">:&gt;15.2f}</span><span class="ss"> </span><span class="sc">{</span>initial_rent<span class="sc">:&gt;12.2f}</span><span class="ss"> </span><span class="sc">{</span>new_rent<span class="sc">:&gt;12.2f}</span><span class="ss"> </span><span class="sc">{</span>pct_increase<span class="sc">:&gt;11.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Key insight: Inelastic cities (low γ) see much larger rent increases!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Effect of 50% Population Growth on Rents
+======================================================================
+City                  Elasticity (γ) Initial Rent     New Rent   % Increase
+----------------------------------------------------------------------
+Houston                         2.55         1.00         1.17        17.2%
+Austin                          1.63         1.00         1.28        28.2%
+Chicago                         1.12         1.00         1.44        43.6%
+Los Angeles                     0.76         1.00         1.70        70.5%
+San Francisco                   0.66         1.00         1.85        84.8%
+----------------------------------------------------------------------
+
+Key insight: Inelastic cities (low γ) see much larger rent increases!</code></pre>
+</div>
+</div>
+</section>
+<section id="rent-elasticity" class="level2">
+<h2 class="anchored" data-anchor-id="rent-elasticity">Rent Elasticity</h2>
+<p>The elasticity of rent with respect to population is simply <span class="math inline">\(1/\gamma\)</span>. This tells us how much rents respond to population changes.</p>
+<div id="cell-11" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Rent Elasticity with Respect to Population"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'City'</span><span class="sc">:&lt;20}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Supply Elasticity (γ)'</span><span class="sc">:&gt;25}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Rent Elasticity (1/γ)'</span><span class="sc">:&gt;25}</span><span class="ss">"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city_name, gamma <span class="kw">in</span> cities:</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    rent_elast <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> gamma</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>city_name<span class="sc">:&lt;20}</span><span class="ss"> </span><span class="sc">{</span>gamma<span class="sc">:&gt;25.2f}</span><span class="ss"> </span><span class="sc">{</span>rent_elast<span class="sc">:&gt;25.2f}</span><span class="ss">"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Interpretation: In San Francisco (γ=0.66), a 1% population increase"</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"                causes a 1.5</span><span class="sc">% r</span><span class="st">ent increase."</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"                In Houston (γ=2.55), the same 1</span><span class="sc">% i</span><span class="st">ncrease"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"                causes only a 0.4</span><span class="sc">% r</span><span class="st">ent increase."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rent Elasticity with Respect to Population
+======================================================================
+City                     Supply Elasticity (γ)     Rent Elasticity (1/γ)
+----------------------------------------------------------------------
+Houston                                   2.55                      0.39
+Austin                                    1.63                      0.61
+Chicago                                   1.12                      0.89
+Los Angeles                               0.76                      1.32
+San Francisco                             0.66                      1.52
+----------------------------------------------------------------------
+
+Interpretation: In San Francisco (γ=0.66), a 1% population increase
+                causes a 1.5% rent increase.
+                In Houston (γ=2.55), the same 1% increase
+                causes only a 0.4% rent increase.</code></pre>
+</div>
+</div>
+</section>
+<section id="tests" class="level2">
+<h2 class="anchored" data-anchor-id="tests">Tests</h2>
+</section>
+<section id="visualizing-supply-curves" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-supply-curves">Visualizing Supply Curves</h2>
+<p>Let’s plot housing supply curves for different elasticities.</p>
+<div id="cell-14" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This cell would create a visualization if matplotlib is available</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    rents <span class="op">=</span> np.linspace(<span class="fl">0.1</span>, <span class="dv">5</span>, <span class="dv">100</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    supply_shifter <span class="op">=</span> <span class="dv">1_000_000</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> gamma, label <span class="kw">in</span> [(<span class="fl">0.66</span>, <span class="st">"San Francisco (γ=0.66)"</span>), (<span class="fl">1.12</span>, <span class="st">"Chicago (γ=1.12)"</span>), (<span class="fl">2.55</span>, <span class="st">"Houston (γ=2.55)"</span>)]:</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        quantities <span class="op">=</span> [housing_supply(r, supply_shifter, gamma) <span class="cf">for</span> r <span class="kw">in</span> rents]</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        ax.plot(np.array(quantities) <span class="op">/</span> <span class="fl">1e6</span>, rents, label<span class="op">=</span>label, linewidth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Housing Quantity (millions of units)"</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Rent (index)"</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">"Housing Supply Curves: How Elasticity Affects Supply Response"</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    ax.legend()</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ImportError</span>:</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Matplotlib not available for visualization"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_housing_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="key-insights" class="level2">
+<h2 class="anchored" data-anchor-id="key-insights">Key Insights</h2>
+<ol type="1">
+<li><strong>Supply elasticity is crucial</strong>: It determines how much rents rise when population increases</li>
+<li><strong>Inelastic supply → rent spikes</strong>: Cities with geographic or regulatory constraints see explosive rent growth</li>
+<li><strong>Elastic supply → stable rents</strong>: Cities with room to build can absorb population growth</li>
+<li><strong>Policy matters</strong>: Zoning and planning regulations directly affect <span class="math inline">\(\gamma\)</span></li>
+</ol>
+<section id="why-this-matters-for-policy" class="level3">
+<h3 class="anchored" data-anchor-id="why-this-matters-for-policy">Why This Matters for Policy</h3>
+<p><strong>If a productive city has inelastic housing supply</strong>:</p>
+<ul>
+<li>Workers face high rents</li>
+<li>Many workers are priced out</li>
+<li>They move to less productive cities</li>
+<li><strong>National GDP falls</strong></li>
+</ul>
+<p>This is the mechanism behind the Hsieh-Moretti (2019) finding that housing constraints in high-productivity cities reduce U.S. GDP by 3.7-8.9%.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/henrydashwood/housing_prices/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

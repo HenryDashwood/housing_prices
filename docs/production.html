@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Production functions, agglomeration economies, and wage determination">
+
+<title>src - Firm Production and Agglomeration</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="src - Firm Production and Agglomeration">
+<meta property="og:description" content="Production functions, agglomeration economies, and wage determination">
+<meta property="og:site_name" content="src">
+<meta name="twitter:title" content="src - Firm Production and Agglomeration">
+<meta name="twitter:description" content="Production functions, agglomeration economies, and wage determination">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">src</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./parameters.html">Model Components</a></li><li class="breadcrumb-item"><a href="./production.html">Firm Production</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Overview</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Core Utilities</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Model Components</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./parameters.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Parameters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./utility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Worker Utility</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./housing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Housing Supply</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./production.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Firm Production</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Equilibrium</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./equilibrium.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Equilibrium Solver</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model API</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-are-big-cities-more-productive" id="toc-why-are-big-cities-more-productive" class="nav-link active" data-scroll-target="#why-are-big-cities-more-productive">Why Are Big Cities More Productive?</a></li>
+  <li><a href="#the-production-function" id="toc-the-production-function" class="nav-link" data-scroll-target="#the-production-function">The Production Function</a></li>
+  <li><a href="#agglomeration-economies" id="toc-agglomeration-economies" class="nav-link" data-scroll-target="#agglomeration-economies">Agglomeration Economies</a>
+  <ul class="collapse">
+  <li><a href="#agglomeration-elasticity" id="toc-agglomeration-elasticity" class="nav-link" data-scroll-target="#agglomeration-elasticity">Agglomeration Elasticity</a></li>
+  </ul></li>
+  <li><a href="#combining-production-and-agglomeration" id="toc-combining-production-and-agglomeration" class="nav-link" data-scroll-target="#combining-production-and-agglomeration">Combining Production and Agglomeration</a>
+  <ul class="collapse">
+  <li><a href="#agglomeration_factor" id="toc-agglomeration_factor" class="nav-link" data-scroll-target="#agglomeration_factor">agglomeration_factor</a></li>
+  <li><a href="#output_per_worker" id="toc-output_per_worker" class="nav-link" data-scroll-target="#output_per_worker">output_per_worker</a></li>
+  <li><a href="#calculate_wage" id="toc-calculate_wage" class="nav-link" data-scroll-target="#calculate_wage">calculate_wage</a></li>
+  <li><a href="#calculate_output" id="toc-calculate_output" class="nav-link" data-scroll-target="#calculate_output">calculate_output</a></li>
+  <li><a href="#calculate_tfp" id="toc-calculate_tfp" class="nav-link" data-scroll-target="#calculate_tfp">calculate_tfp</a></li>
+  </ul></li>
+  <li><a href="#demonstrating-agglomeration-effects" id="toc-demonstrating-agglomeration-effects" class="nav-link" data-scroll-target="#demonstrating-agglomeration-effects">Demonstrating Agglomeration Effects</a></li>
+  <li><a href="#comparing-agglomeration-parameters" id="toc-comparing-agglomeration-parameters" class="nav-link" data-scroll-target="#comparing-agglomeration-parameters">Comparing Agglomeration Parameters</a></li>
+  <li><a href="#the-agglomeration-multiplier" id="toc-the-agglomeration-multiplier" class="nav-link" data-scroll-target="#the-agglomeration-multiplier">The Agglomeration Multiplier</a></li>
+  <li><a href="#tests" id="toc-tests" class="nav-link" data-scroll-target="#tests">Tests</a></li>
+  <li><a href="#why-this-matters" id="toc-why-this-matters" class="nav-link" data-scroll-target="#why-this-matters">Why This Matters</a>
+  <ul class="collapse">
+  <li><a href="#policy-implications" id="toc-policy-implications" class="nav-link" data-scroll-target="#policy-implications">Policy Implications</a></li>
+  </ul></li>
+  <li><a href="#key-insights" id="toc-key-insights" class="nav-link" data-scroll-target="#key-insights">Key Insights</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/henrydashwood/housing_prices/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="production.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./parameters.html">Model Components</a></li><li class="breadcrumb-item"><a href="./production.html">Firm Production</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Firm Production and Agglomeration</h1>
+</div>
+
+<div>
+  <div class="description">
+    Production functions, agglomeration economies, and wage determination
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="why-are-big-cities-more-productive" class="level2">
+<h2 class="anchored" data-anchor-id="why-are-big-cities-more-productive">Why Are Big Cities More Productive?</h2>
+<p>A key empirical fact: <strong>larger cities have higher productivity and wages</strong>.</p>
+<p><strong>Evidence</strong>:</p>
+<ul>
+<li>Doubling city size increases wages by ~3-8%</li>
+<li>This is known as the <strong>urban wage premium</strong> or <strong>agglomeration benefits</strong></li>
+</ul>
+<p><strong>Why does this happen?</strong> Three main mechanisms (Marshall’s trinity):</p>
+<ol type="1">
+<li><strong>Knowledge spillovers</strong>: Learn from nearby workers and firms</li>
+<li><strong>Labour market matching</strong>: Find better job/worker matches in thick markets</li>
+<li><strong>Input sharing</strong>: Access to specialized suppliers and services</li>
+</ol>
+</section>
+<section id="the-production-function" class="level2">
+<h2 class="anchored" data-anchor-id="the-production-function">The Production Function</h2>
+<p>Firms produce output using labour:</p>
+<p><span class="math display">\[Y = A \cdot L^{\alpha}\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(Y\)</span> = output</li>
+<li><span class="math inline">\(A\)</span> = total factor productivity (TFP)</li>
+<li><span class="math inline">\(L\)</span> = labour (number of workers)</li>
+<li><span class="math inline">\(\alpha\)</span> = labour share (typically 0.6-0.7)</li>
+</ul>
+<p><strong>Diminishing returns</strong>: As <span class="math inline">\(L\)</span> increases, output grows, but at a decreasing rate (since <span class="math inline">\(\alpha &lt; 1\)</span>).</p>
+</section>
+<section id="agglomeration-economies" class="level2">
+<h2 class="anchored" data-anchor-id="agglomeration-economies">Agglomeration Economies</h2>
+<p>The key innovation: <strong>productivity increases with city size</strong>:</p>
+<p><span class="math display">\[A = \bar{A} \cdot L^{\eta}\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(\bar{A}\)</span> = base TFP</li>
+<li><span class="math inline">\(\eta\)</span> = <strong>agglomeration elasticity</strong> (typically 0.02-0.08)</li>
+</ul>
+<p>This means larger cities have higher TFP!</p>
+<section id="agglomeration-elasticity" class="level3">
+<h3 class="anchored" data-anchor-id="agglomeration-elasticity">Agglomeration Elasticity</h3>
+<p>The parameter <span class="math inline">\(\eta\)</span> measures how much productivity increases with city size:</p>
+<p><span class="math display">\[\eta = \frac{\% \Delta A}{\% \Delta L}\]</span></p>
+<p><strong>Typical estimates</strong>:</p>
+<ul>
+<li>Academic consensus: <span class="math inline">\(\eta \approx 0.02 - 0.08\)</span> (2-8% TFP gain from doubling city size)</li>
+<li>Hsieh-Moretti (2019): <span class="math inline">\(\eta = 0.25\)</span> (very strong agglomeration!)</li>
+<li>Cooped Up (2024): <span class="math inline">\(\eta = 0.25\)</span> (follows Hsieh-Moretti)</li>
+</ul>
+</section>
+</section>
+<section id="combining-production-and-agglomeration" class="level2">
+<h2 class="anchored" data-anchor-id="combining-production-and-agglomeration">Combining Production and Agglomeration</h2>
+<p>Putting it together:</p>
+<p><span class="math display">\[Y = \bar{A} \cdot L^{\alpha} \cdot L^{\eta} = \bar{A} \cdot L^{\alpha + \eta}\]</span></p>
+<p><strong>Key insight</strong>: The effective elasticity of output w.r.t. labour is <span class="math inline">\(\alpha + \eta &gt; \alpha\)</span>.</p>
+<p>Agglomeration creates <strong>increasing returns to scale</strong> at the city level!</p>
+<hr>
+<section id="agglomeration_factor" class="level3">
+<h3 class="anchored" data-anchor-id="agglomeration_factor">agglomeration_factor</h3>
+<blockquote class="blockquote">
+<pre><code> agglomeration_factor (population:float, reference_population:float,
+                       eta:float)</code></pre>
+</blockquote>
+<p><em>Calculate the TFP multiplier from agglomeration relative to a reference city.</em></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>population</td>
+<td>float</td>
+<td>Population of city of interest</td>
+</tr>
+<tr class="even">
+<td>reference_population</td>
+<td>float</td>
+<td>Population of reference city</td>
+</tr>
+<tr class="odd">
+<td>eta</td>
+<td>float</td>
+<td>Agglomeration elasticity</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>float</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="output_per_worker" class="level3">
+<h3 class="anchored" data-anchor-id="output_per_worker">output_per_worker</h3>
+<blockquote class="blockquote">
+<pre><code> output_per_worker (population:float, base_tfp:float, alpha:float=0.65,
+                    eta:float=0.04)</code></pre>
+</blockquote>
+<p><em>Calculate output per worker (labour productivity).</em></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>population</td>
+<td>float</td>
+<td></td>
+<td>City population</td>
+</tr>
+<tr class="even">
+<td>base_tfp</td>
+<td>float</td>
+<td></td>
+<td>Base TFP</td>
+</tr>
+<tr class="odd">
+<td>alpha</td>
+<td>float</td>
+<td>0.65</td>
+<td>Labour share</td>
+</tr>
+<tr class="even">
+<td>eta</td>
+<td>float</td>
+<td>0.04</td>
+<td>Agglomeration elasticity</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>float</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="calculate_wage" class="level3">
+<h3 class="anchored" data-anchor-id="calculate_wage">calculate_wage</h3>
+<blockquote class="blockquote">
+<pre><code> calculate_wage (population:float, base_tfp:float, alpha:float=0.65,
+                 eta:float=0.04)</code></pre>
+</blockquote>
+<p><em>Calculate equilibrium wage as marginal product of labour.</em></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>population</td>
+<td>float</td>
+<td></td>
+<td>City population (= labour)</td>
+</tr>
+<tr class="even">
+<td>base_tfp</td>
+<td>float</td>
+<td></td>
+<td>Base TFP</td>
+</tr>
+<tr class="odd">
+<td>alpha</td>
+<td>float</td>
+<td>0.65</td>
+<td>Labour share in production</td>
+</tr>
+<tr class="even">
+<td>eta</td>
+<td>float</td>
+<td>0.04</td>
+<td>Agglomeration elasticity</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>float</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="calculate_output" class="level3">
+<h3 class="anchored" data-anchor-id="calculate_output">calculate_output</h3>
+<blockquote class="blockquote">
+<pre><code> calculate_output (population:float, base_tfp:float, alpha:float=0.65,
+                   eta:float=0.04)</code></pre>
+</blockquote>
+<p><em>Calculate total output with agglomeration economies.</em></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>population</td>
+<td>float</td>
+<td></td>
+<td>City population (= labour)</td>
+</tr>
+<tr class="even">
+<td>base_tfp</td>
+<td>float</td>
+<td></td>
+<td>Base TFP</td>
+</tr>
+<tr class="odd">
+<td>alpha</td>
+<td>float</td>
+<td>0.65</td>
+<td>Labour share in production</td>
+</tr>
+<tr class="even">
+<td>eta</td>
+<td>float</td>
+<td>0.04</td>
+<td>Agglomeration elasticity</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>float</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="calculate_tfp" class="level3">
+<h3 class="anchored" data-anchor-id="calculate_tfp">calculate_tfp</h3>
+<blockquote class="blockquote">
+<pre><code> calculate_tfp (population:float, base_tfp:float, eta:float)</code></pre>
+</blockquote>
+<p><em>Calculate total factor productivity with agglomeration.</em></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>population</td>
+<td>float</td>
+<td>City population (= labour)</td>
+</tr>
+<tr class="even">
+<td>base_tfp</td>
+<td>float</td>
+<td>Base TFP (productivity when L=1)</td>
+</tr>
+<tr class="odd">
+<td>eta</td>
+<td>float</td>
+<td>Agglomeration elasticity</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>float</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<div id="cell-9" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate TFP with agglomeration</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tfp <span class="op">=</span> calculate_tfp(population<span class="op">=</span><span class="dv">1_000_000</span>, base_tfp<span class="op">=</span><span class="dv">100</span>, eta<span class="op">=</span><span class="fl">0.04</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> tfp <span class="op">&gt;</span> <span class="dv">100</span>  <span class="co"># Should be higher due to agglomeration</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(tfp, <span class="dv">100</span> <span class="op">*</span> (<span class="dv">1_000_000</span><span class="op">**</span><span class="fl">0.04</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Test that larger cities have higher TFP</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>tfp_small <span class="op">=</span> calculate_tfp(<span class="dv">100_000</span>, <span class="dv">100</span>, <span class="fl">0.04</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>tfp_large <span class="op">=</span> calculate_tfp(<span class="dv">1_000_000</span>, <span class="dv">100</span>, <span class="fl">0.04</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> tfp_large <span class="op">&gt;</span> tfp_small</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Test wage = alpha * output per worker</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>wage <span class="op">=</span> calculate_wage(<span class="dv">1_000_000</span>, <span class="dv">100</span>, <span class="fl">0.65</span>, <span class="fl">0.04</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>output_pw <span class="op">=</span> output_per_worker(<span class="dv">1_000_000</span>, <span class="dv">100</span>, <span class="fl">0.65</span>, <span class="fl">0.04</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isclose(wage, <span class="fl">0.65</span> <span class="op">*</span> output_pw, rtol<span class="op">=</span><span class="fl">0.01</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="demonstrating-agglomeration-effects" class="level2">
+<h2 class="anchored" data-anchor-id="demonstrating-agglomeration-effects">Demonstrating Agglomeration Effects</h2>
+<div id="cell-11" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare cities of different sizes</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>base_tfp <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.65</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.04</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>populations <span class="op">=</span> [<span class="dv">100_000</span>, <span class="dv">500_000</span>, <span class="dv">1_000_000</span>, <span class="dv">5_000_000</span>, <span class="dv">10_000_000</span>]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Effect of City Size on Productivity and Wages"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Population'</span><span class="sc">:&gt;12}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'TFP'</span><span class="sc">:&gt;10}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Output'</span><span class="sc">:&gt;15}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Wage'</span><span class="sc">:&gt;10}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Output/Worker'</span><span class="sc">:&gt;15}</span><span class="ss">"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> pop <span class="kw">in</span> populations:</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    tfp <span class="op">=</span> calculate_tfp(pop, base_tfp, eta)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> calculate_output(pop, base_tfp, alpha, eta)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    wage <span class="op">=</span> calculate_wage(pop, base_tfp, alpha, eta)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    output_pw <span class="op">=</span> output_per_worker(pop, base_tfp, alpha, eta)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>pop<span class="sc">:&gt;12,}</span><span class="ss"> </span><span class="sc">{</span>tfp<span class="sc">:&gt;10.1f}</span><span class="ss"> </span><span class="sc">{</span>output<span class="sc">:&gt;15,.0f}</span><span class="ss"> </span><span class="sc">{</span>wage<span class="sc">:&gt;10.2f}</span><span class="ss"> </span><span class="sc">{</span>output_pw<span class="sc">:&gt;15.2f}</span><span class="ss">"</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Key insight: Larger cities have higher TFP, output, wages, and productivity!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Effect of City Size on Productivity and Wages
+================================================================================
+  Population        TFP          Output       Wage   Output/Worker
+--------------------------------------------------------------------------------
+     100,000      158.5         281,838       1.83            2.82
+     500,000      169.0         855,637       1.11            1.71
+   1,000,000      173.8       1,380,384       0.90            1.38
+   5,000,000      185.3       4,190,726       0.54            0.84
+  10,000,000      190.5       6,760,830       0.44            0.68
+--------------------------------------------------------------------------------
+
+Key insight: Larger cities have higher TFP, output, wages, and productivity!</code></pre>
+</div>
+</div>
+</section>
+<section id="comparing-agglomeration-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-agglomeration-parameters">Comparing Agglomeration Parameters</h2>
+<p>Let’s see how different values of <span class="math inline">\(\eta\)</span> affect the urban wage premium.</p>
+<div id="cell-13" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare wage premia with different agglomeration elasticities</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>small_city_pop <span class="op">=</span> <span class="dv">500_000</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>large_city_pop <span class="op">=</span> <span class="dv">5_000_000</span>  <span class="co"># 10x larger</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>etas <span class="op">=</span> [</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    (<span class="fl">0.02</span>, <span class="st">"Conservative (η=0.02)"</span>),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    (<span class="fl">0.04</span>, <span class="st">"Standard (η=0.04)"</span>),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    (<span class="fl">0.08</span>, <span class="st">"High (η=0.08)"</span>),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    (<span class="fl">0.25</span>, <span class="st">"Hsieh-Moretti (η=0.25)"</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Urban Wage Premium: Large City (</span><span class="sc">{</span>large_city_pop<span class="sc">:,}</span><span class="ss">) vs Small City (</span><span class="sc">{</span>small_city_pop<span class="sc">:,}</span><span class="ss">)"</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Scenario'</span><span class="sc">:&lt;30}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Small City Wage'</span><span class="sc">:&gt;18}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Large City Wage'</span><span class="sc">:&gt;18}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Wage Premium'</span><span class="sc">:&gt;15}</span><span class="ss">"</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> eta, label <span class="kw">in</span> etas:</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    wage_small <span class="op">=</span> calculate_wage(small_city_pop, base_tfp, alpha, eta)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    wage_large <span class="op">=</span> calculate_wage(large_city_pop, base_tfp, alpha, eta)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    premium_pct <span class="op">=</span> (wage_large <span class="op">/</span> wage_small <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>label<span class="sc">:&lt;30}</span><span class="ss"> </span><span class="sc">{</span>wage_small<span class="sc">:&gt;18.2f}</span><span class="ss"> </span><span class="sc">{</span>wage_large<span class="sc">:&gt;18.2f}</span><span class="ss"> </span><span class="sc">{</span>premium_pct<span class="sc">:&gt;14.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Interpretation: Higher η → stronger agglomeration → larger wage differences"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Urban Wage Premium: Large City (5,000,000) vs Small City (500,000)
+================================================================================
+Scenario                          Small City Wage    Large City Wage    Wage Premium
+--------------------------------------------------------------------------------
+Conservative (η=0.02)                        0.86               0.40          -53.2%
+Standard (η=0.04)                            1.11               0.54          -51.0%
+High (η=0.08)                                1.88               1.01          -46.3%
+Hsieh-Moretti (η=0.25)                      17.50              13.90          -20.6%
+--------------------------------------------------------------------------------
+
+Interpretation: Higher η → stronger agglomeration → larger wage differences</code></pre>
+</div>
+</div>
+</section>
+<section id="the-agglomeration-multiplier" class="level2">
+<h2 class="anchored" data-anchor-id="the-agglomeration-multiplier">The Agglomeration Multiplier</h2>
+<p>How much more productive is a city of size <span class="math inline">\(L\)</span> compared to a reference city?</p>
+<div id="cell-15" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare London vs other UK cities</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>reference_pop <span class="op">=</span> <span class="dv">500_000</span>  <span class="co"># Typical mid-size UK city</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.04</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>uk_cities <span class="op">=</span> [</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Mid-size city (reference)"</span>, <span class="dv">500_000</span>),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Birmingham"</span>, <span class="dv">1_100_000</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Manchester"</span>, <span class="dv">2_800_000</span>),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"London"</span>, <span class="dv">9_000_000</span>),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"TFP Multiplier from Agglomeration (relative to mid-size city)"</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">60</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'City'</span><span class="sc">:&lt;30}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Population'</span><span class="sc">:&gt;15}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'TFP Multiplier'</span><span class="sc">:&gt;15}</span><span class="ss">"</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">60</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city_name, pop <span class="kw">in</span> uk_cities:</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    multiplier <span class="op">=</span> agglomeration_factor(pop, reference_pop, eta)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>city_name<span class="sc">:&lt;30}</span><span class="ss"> </span><span class="sc">{</span>pop<span class="sc">:&gt;15,}</span><span class="ss"> </span><span class="sc">{</span>multiplier<span class="sc">:&gt;15.2f}</span><span class="ss">x"</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">60</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">With η=</span><span class="sc">{</span>eta<span class="sc">}</span><span class="ss">, London is </span><span class="sc">{</span>agglomeration_factor(<span class="dv">9_000_000</span>, <span class="dv">500_000</span>, eta)<span class="sc">:.2f}</span><span class="ss">x more productive"</span>)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"than a mid-size city purely from agglomeration effects!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>TFP Multiplier from Agglomeration (relative to mid-size city)
+============================================================
+City                                Population  TFP Multiplier
+------------------------------------------------------------
+Mid-size city (reference)              500,000            1.00x
+Birmingham                           1,100,000            1.03x
+Manchester                           2,800,000            1.07x
+London                               9,000,000            1.12x
+------------------------------------------------------------
+
+With η=0.04, London is 1.12x more productive
+than a mid-size city purely from agglomeration effects!</code></pre>
+</div>
+</div>
+</section>
+<section id="tests" class="level2">
+<h2 class="anchored" data-anchor-id="tests">Tests</h2>
+</section>
+<section id="why-this-matters" class="level2">
+<h2 class="anchored" data-anchor-id="why-this-matters">Why This Matters</h2>
+<p>Agglomeration economies create a powerful force pulling workers toward large cities:</p>
+<ol type="1">
+<li><strong>Big cities are more productive</strong> → firms can pay higher wages</li>
+<li><strong>Workers want higher wages</strong> → they migrate to big cities</li>
+<li><strong>But rents rise</strong> (especially with inelastic housing supply)</li>
+<li><strong>Equilibrium</strong> balances productivity gains against rent increases</li>
+</ol>
+<section id="policy-implications" class="level3">
+<h3 class="anchored" data-anchor-id="policy-implications">Policy Implications</h3>
+<p>If housing supply is constrained in productive cities:</p>
+<ul>
+<li>Rents spike</li>
+<li>Workers are pushed out</li>
+<li>They end up in less productive locations</li>
+<li><strong>National GDP falls</strong></li>
+</ul>
+<p>The strength of agglomeration (<span class="math inline">\(\eta\)</span>) determines <strong>how much GDP is lost</strong>:</p>
+<ul>
+<li>Higher <span class="math inline">\(\eta\)</span> → stronger agglomeration → bigger losses from constraints</li>
+<li>Hsieh-Moretti use <span class="math inline">\(\eta = 0.25\)</span> and find 3.7-8.9% GDP loss</li>
+<li>With lower <span class="math inline">\(\eta \approx 0.04\)</span>, the loss would be smaller but still significant</li>
+</ul>
+</section>
+</section>
+<section id="key-insights" class="level2">
+<h2 class="anchored" data-anchor-id="key-insights">Key Insights</h2>
+<ol type="1">
+<li><strong>Agglomeration economies</strong>: Larger cities are more productive (η typically 0.02-0.08)</li>
+<li><strong>Wage premium</strong>: Big cities pay higher wages due to higher productivity</li>
+<li><strong>Increasing returns</strong>: At the city level, production has increasing returns (α + η &gt; α)</li>
+<li><strong>Debate over η</strong>: Academic estimates vary from 0.02 to 0.25, which matters hugely for policy</li>
+<li><strong>Spatial misallocation</strong>: If productive cities can’t accommodate workers, national output suffers</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/henrydashwood/housing_prices/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

@@ -17,3 +17,12 @@ wheels/
 **/*.xls
 **/*.xlsx
 **/*.geojson
+
+# nbdev artifacts
+_docs/
+_proc/
+*.bak
+.gitattributes
+setup.py
+MANIFEST
+nbs/.last_checked

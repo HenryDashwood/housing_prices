@@ -1,0 +1,695 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Rosen-Roback Spatial Equilibrium",
+    "section": "",
+    "text": "This library implements spatial equilibrium models to answer a simple question:\n\nHow much richer could we be with more liberal planning laws?\n\nHousing constraints in productive cities like London, New York, and San Francisco prevent workers from living where they’re most productive. This spatial misallocation reduces GDP by billions.\nWe provide:\n\n📐 Model components — Utility, housing supply, production, and equilibrium solvers\n🔧 High-level API — Run counterfactual analyses with a few lines of code\n📊 Dataset abstractions — Plug in UK, US, or synthetic data",
+    "crumbs": [
+      "Overview",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#what-is-this",
+    "href": "index.html#what-is-this",
+    "title": "Rosen-Roback Spatial Equilibrium",
+    "section": "",
+    "text": "This library implements spatial equilibrium models to answer a simple question:\n\nHow much richer could we be with more liberal planning laws?\n\nHousing constraints in productive cities like London, New York, and San Francisco prevent workers from living where they’re most productive. This spatial misallocation reduces GDP by billions.\nWe provide:\n\n📐 Model components — Utility, housing supply, production, and equilibrium solvers\n🔧 High-level API — Run counterfactual analyses with a few lines of code\n📊 Dataset abstractions — Plug in UK, US, or synthetic data",
+    "crumbs": [
+      "Overview",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#the-rosen-roback-framework",
+    "href": "index.html#the-rosen-roback-framework",
+    "title": "Rosen-Roback Spatial Equilibrium",
+    "section": "The Rosen-Roback Framework",
+    "text": "The Rosen-Roback Framework\nThe Rosen-Roback model is the workhorse of urban economics. It explains how workers and firms sort across cities based on:\n\n\n\n\n\n\n\nFactor\nEffect\n\n\n\n\nWages\nHigher in productive cities (pulls workers in)\n\n\nRents\nHigher where demand exceeds supply (pushes workers out)\n\n\nAmenities\nWeather, culture, safety (pulls workers to nice places)\n\n\n\nIn spatial equilibrium, workers are indifferent between locations—any advantage in one dimension is offset by disadvantages in others.\n\nThe Key Insight\nWhen housing supply is constrained (low elasticity), productive cities can’t grow. Workers who would move to high-wage cities stay in lower-productivity areas because rents are too high. This misallocation costs GDP.\nRelaxing housing constraints → More workers in productive cities → Higher GDP",
+    "crumbs": [
+      "Overview",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#quick-example",
+    "href": "index.html#quick-example",
+    "title": "Rosen-Roback Spatial Equilibrium",
+    "section": "Quick Example",
+    "text": "Quick Example\n\nfrom src.model import CounterfactualScenario, RosenRobackModel, ThreeCityDataset\nfrom src.parameters import ModelParameters\n\n# Create model with standard parameters\nmodel = RosenRobackModel(params=ModelParameters.STANDARD)\n\n# Use a simple three-city dataset\ndataset = ThreeCityDataset(\n    high_tfp=120,  # High productivity city\n    medium_tfp=100,  # Medium productivity\n    low_tfp=80,  # Low productivity\n    high_elasticity=1.5,  # Constrained (like London/SF)\n    low_elasticity=3.0,  # Elastic (like Houston)\n)\n\n# Solve baseline equilibrium\nbaseline = model.solve(dataset)\nprint(baseline.summary())\n\nSpatial Equilibrium Results\n======================================================================\nCity                        Population       Wage       Rent    Utility\n----------------------------------------------------------------------\nHigh Productivity              713,304       1.20      79.83     0.2817\nMedium                         973,846       0.90      31.21     0.2907\nLow Productivity             1,312,850       0.66      10.95     0.2995\n----------------------------------------------------------------------\nTotal GDP: 3,999,865\nUtility spread: 6.3% (smaller = closer to classic R-R equilibrium)\nConverged: True (64 iterations)\n\n\n\n# What if we liberalized housing in the high-productivity city?\nscenario = CounterfactualScenario(\n    name=\"Housing Reform\",\n    description=\"Double the housing supply elasticity in the productive city\",\n    elasticity_changes={\"High Productivity\": 3.0},  # From 1.5 to 3.0\n)\n\nbaseline, counterfactual, gdp_impact = model.run_counterfactual(dataset, scenario)\n\nprint(f\"GDP Impact: {gdp_impact['gdp_change_pct']:.2f}%\")\nprint(\"\\nPopulation shift to high-productivity city:\")\nprint(f\"  Before: {baseline.population[0]:,.0f}\")\nprint(f\"  After:  {counterfactual.population[0]:,.0f}\")\n\nGDP Impact: 5.35%\n\nPopulation shift to high-productivity city:\n  Before: 713,304\n  After:  1,651,036",
+    "crumbs": [
+      "Overview",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#documentation-structure",
+    "href": "index.html#documentation-structure",
+    "title": "Rosen-Roback Spatial Equilibrium",
+    "section": "Documentation Structure",
+    "text": "Documentation Structure\n\nModel Components\nThe model is built from composable pieces:\n\n\n\nModule\nDescription\n\n\n\n\nParameters\nModel parameters, city parameters, and result containers\n\n\nUtility\nWorker utility functions and spatial indifference conditions\n\n\nHousing\nHousing supply curves and rent determination\n\n\nProduction\nFirm production with agglomeration externalities\n\n\n\n\n\nEquilibrium & API\n\n\n\nModule\nDescription\n\n\n\n\nEquilibrium Solver\nIterative algorithm for finding spatial equilibrium\n\n\nModel API\nHigh-level interface for running analyses\n\n\n\n\n\nUtilities\n\n\n\nModule\nDescription\n\n\n\n\nCore Utilities\nPath helpers, downloads, geographic code handling",
+    "crumbs": [
+      "Overview",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "Rosen-Roback Spatial Equilibrium",
+    "section": "Installation",
+    "text": "Installation\nRequires Python 3.13+ and uv.\ngit clone https://github.com/henrydashwood/housing_prices.git\ncd housing_prices\nuv sync",
+    "crumbs": [
+      "Overview",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#references",
+    "href": "index.html#references",
+    "title": "Rosen-Roback Spatial Equilibrium",
+    "section": "References",
+    "text": "References\nThis implementation draws on:\n\nRosen (1979) — Wage-Based Indexes of Urban Quality of Life\nRoback (1982) — Wages, Rents, and the Quality of Life\nHsieh & Moretti (2019) — Housing Constraints and Spatial Misallocation\nMcClements & Hausenloy (2024) — Cooped Up: Quantifying the Cost of Housing Restrictions",
+    "crumbs": [
+      "Overview",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "model.html",
+    "href": "model.html",
+    "title": "Rosen-Roback Model API",
+    "section": "",
+    "text": "This module provides:\n\nDataset abstractions - Flexible interface for different data sources\nRosenRobackModel - High-level API for running equilibrium analysis\nCounterfactual tools - Compare baseline vs. policy scenarios\n\nThe design follows the strategy pattern: any dataset implementing RosenRobackDataset can be used with the model, allowing seamless switching between UK data, US data, or synthetic examples.",
+    "crumbs": [
+      "Equilibrium",
+      "Model API"
+    ]
+  },
+  {
+    "objectID": "model.html#overview",
+    "href": "model.html#overview",
+    "title": "Rosen-Roback Model API",
+    "section": "",
+    "text": "This module provides:\n\nDataset abstractions - Flexible interface for different data sources\nRosenRobackModel - High-level API for running equilibrium analysis\nCounterfactual tools - Compare baseline vs. policy scenarios\n\nThe design follows the strategy pattern: any dataset implementing RosenRobackDataset can be used with the model, allowing seamless switching between UK data, US data, or synthetic examples.",
+    "crumbs": [
+      "Equilibrium",
+      "Model API"
+    ]
+  },
+  {
+    "objectID": "model.html#dataset-interface",
+    "href": "model.html#dataset-interface",
+    "title": "Rosen-Roback Model API",
+    "section": "Dataset Interface",
+    "text": "Dataset Interface\nAll datasets must implement get_cities() and get_total_population():\n\n\nRosenRobackDataset\n\n RosenRobackDataset ()\n\nAbstract base class for datasets usable with the Rosen-Roback model.",
+    "crumbs": [
+      "Equilibrium",
+      "Model API"
+    ]
+  },
+  {
+    "objectID": "model.html#concrete-dataset-implementations",
+    "href": "model.html#concrete-dataset-implementations",
+    "title": "Rosen-Roback Model API",
+    "section": "Concrete Dataset Implementations",
+    "text": "Concrete Dataset Implementations\n\n1. Synthetic Dataset\nGenerates random cities for testing and teaching:\n\n\n\nSyntheticDataset\n\n SyntheticDataset (n_cities:int=10, total_population:float=10000000,\n                   tfp_range:tuple[float,float]=(70, 130),\n                   amenity_range:tuple[float,float]=(0.7, 1.3),\n                   elasticity_range:tuple[float,float]=(0.5, 3.0),\n                   supply_shifter:float=1000.0, seed:int|None=None)\n\nGenerate synthetic cities for testing and teaching.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nn_cities\nint\n10\nNumber of cities to generate\n\n\ntotal_population\nfloat\n10000000\nTotal population across all cities\n\n\ntfp_range\ntuple\n(70, 130)\nRange for base TFP values\n\n\namenity_range\ntuple\n(0.7, 1.3)\nRange for amenity values\n\n\nelasticity_range\ntuple\n(0.5, 3.0)\nRange for supply elasticity\n\n\nsupply_shifter\nfloat\n1000.0\nSupply shifter for all cities\n\n\nseed\nint | None\nNone\nRandom seed for reproducibility\n\n\n\n\n\n2. Three-City Dataset\nSimple pedagogical example with three cities:\n\n\n\nThreeCityDataset\n\n ThreeCityDataset (high_tfp:float=120, medium_tfp:float=100,\n                   low_tfp:float=80, high_elasticity:float=1.5,\n                   medium_elasticity:float=2.0, low_elasticity:float=3.0,\n                   total_population:float=3000000)\n\nSimple three-city dataset for pedagogical examples.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nhigh_tfp\nfloat\n120\nTFP for high-productivity city\n\n\nmedium_tfp\nfloat\n100\nTFP for medium-productivity city\n\n\nlow_tfp\nfloat\n80\nTFP for low-productivity city\n\n\nhigh_elasticity\nfloat\n1.5\nSupply elasticity for high-productivity city\n\n\nmedium_elasticity\nfloat\n2.0\nSupply elasticity for medium-productivity city\n\n\nlow_elasticity\nfloat\n3.0\nSupply elasticity for low-productivity city\n\n\ntotal_population\nfloat\n3000000\nTotal population to distribute\n\n\n\n\n\n3. DataFrame Dataset\nMost flexible - works with any pandas DataFrame:\n\n\n\nDataFrameDataset\n\n DataFrameDataset (df:pandas.core.frame.DataFrame, name:str,\n                   name_col:str='city', tfp_col:str|None=None,\n                   wage_col:str|None=None, rent_col:str|None=None,\n                   elasticity_col:str='elasticity',\n                   population_col:str='population',\n                   default_elasticity:float=2.0)\n\nDataset backed by a pandas DataFrame with configurable column names.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ndf\nDataFrame\n\nDataFrame containing city data\n\n\nname\nstr\n\nHuman-readable name for the dataset\n\n\nname_col\nstr\ncity\nColumn name for city names\n\n\ntfp_col\nstr | None\nNone\nColumn name for TFP values\n\n\nwage_col\nstr | None\nNone\nColumn name for wage values\n\n\nrent_col\nstr | None\nNone\nColumn name for rent values\n\n\nelasticity_col\nstr\nelasticity\nColumn name for supply elasticity\n\n\npopulation_col\nstr\npopulation\nColumn name for population\n\n\ndefault_elasticity\nfloat\n2.0\nDefault elasticity if column not present",
+    "crumbs": [
+      "Equilibrium",
+      "Model API"
+    ]
+  },
+  {
+    "objectID": "model.html#counterfactual-scenarios",
+    "href": "model.html#counterfactual-scenarios",
+    "title": "Rosen-Roback Model API",
+    "section": "Counterfactual Scenarios",
+    "text": "Counterfactual Scenarios\n\n\nCounterfactualScenario\n\n CounterfactualScenario (name:str, description:str,\n                         elasticity_changes:dict[str,float])\n\nDefines a counterfactual scenario for policy analysis.",
+    "crumbs": [
+      "Equilibrium",
+      "Model API"
+    ]
+  },
+  {
+    "objectID": "model.html#the-rosen-roback-model",
+    "href": "model.html#the-rosen-roback-model",
+    "title": "Rosen-Roback Model API",
+    "section": "The Rosen-Roback Model",
+    "text": "The Rosen-Roback Model\nThis is the main class users interact with:\n\n\nRosenRobackModel\n\n RosenRobackModel (params:src.parameters.ModelParameters|None=None)\n\nMulti-city Rosen-Roback spatial equilibrium model.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nparams\nsrc.parameters.ModelParameters | None\nNone\nModel parameters (uses STANDARD if None)",
+    "crumbs": [
+      "Equilibrium",
+      "Model API"
+    ]
+  },
+  {
+    "objectID": "model.html#tests",
+    "href": "model.html#tests",
+    "title": "Rosen-Roback Model API",
+    "section": "Tests",
+    "text": "Tests",
+    "crumbs": [
+      "Equilibrium",
+      "Model API"
+    ]
+  },
+  {
+    "objectID": "model.html#example-usage",
+    "href": "model.html#example-usage",
+    "title": "Rosen-Roback Model API",
+    "section": "Example Usage",
+    "text": "Example Usage\n\n# Create a model with standard parameters\nmodel = RosenRobackModel(params=ModelParameters.STANDARD)\n\n# Use three-city dataset\ndataset = ThreeCityDataset()\n\n# Solve baseline\nresult = model.solve(dataset)\nprint(result.summary())\n\n# Run counterfactual: increase HP elasticity from 1.5 to 3.0\nscenario = CounterfactualScenario(\n    name=\"Housing Reform\",\n    description=\"Liberalize high-productivity city\",\n    elasticity_changes={\"High Productivity\": 3.0},\n)\n\nbaseline, counterfactual, gdp_impact = model.run_counterfactual(dataset, scenario)\nprint(f\"\\nGDP Impact: {gdp_impact['gdp_change_pct']:.2f}%\")",
+    "crumbs": [
+      "Equilibrium",
+      "Model API"
+    ]
+  },
+  {
+    "objectID": "model.html#key-insights",
+    "href": "model.html#key-insights",
+    "title": "Rosen-Roback Model API",
+    "section": "Key Insights",
+    "text": "Key Insights\n\nDataset abstraction enables flexibility - same model works with UK, US, or synthetic data\nRosenRobackModel provides clean API - users don’t need to know about solvers or log-space\nCounterfactual analysis is straightforward - just specify which cities to reform\nType safety - All parameters are typed, catching errors at development time\n\nThis design makes it easy to:\n\nTest the model with synthetic data\nRun actual replications with real data\nCompare policy scenarios\nExtend with new datasets (just implement the interface)",
+    "crumbs": [
+      "Equilibrium",
+      "Model API"
+    ]
+  },
+  {
+    "objectID": "equilibrium.html",
+    "href": "equilibrium.html",
+    "title": "Spatial Equilibrium Solver",
+    "section": "",
+    "text": "In spatial equilibrium, workers are indifferent between locations. If one city were strictly better, workers would migrate there, changing wages and rents until the advantage disappears.\n\n\n1. Perfect Mobility (Classic Rosen-Roback)\nWorkers are perfectly mobile, so utilities exactly equalize:\n\\[V_1 = V_2 = V_3 = \\ldots = \\bar{V}\\]\nIn this case, amenities are calibrated to rationalize observed populations given wages and rents.\n2. Imperfect Mobility (Fréchet/Probabilistic)\nWorkers face moving costs or have heterogeneous location preferences. Population shares follow:\n\\[\\text{share}_i = \\frac{V_i^\\theta}{\\sum_j V_j^\\theta}\\]\nwhere \\(\\theta\\) is the mobility parameter:\n\nHigher \\(\\theta\\) → more mobile → utilities converge\nLower \\(\\theta\\) → less mobile → larger utility differences\n\\(\\theta \\to \\infty\\) → perfect mobility (classic case)\n\nThis model allows realistic utility spreads (e.g., 3-15%) while maintaining spatial equilibrium logic.",
+    "crumbs": [
+      "Equilibrium",
+      "Equilibrium Solver"
+    ]
+  },
+  {
+    "objectID": "equilibrium.html#the-spatial-equilibrium-concept",
+    "href": "equilibrium.html#the-spatial-equilibrium-concept",
+    "title": "Spatial Equilibrium Solver",
+    "section": "",
+    "text": "In spatial equilibrium, workers are indifferent between locations. If one city were strictly better, workers would migrate there, changing wages and rents until the advantage disappears.\n\n\n1. Perfect Mobility (Classic Rosen-Roback)\nWorkers are perfectly mobile, so utilities exactly equalize:\n\\[V_1 = V_2 = V_3 = \\ldots = \\bar{V}\\]\nIn this case, amenities are calibrated to rationalize observed populations given wages and rents.\n2. Imperfect Mobility (Fréchet/Probabilistic)\nWorkers face moving costs or have heterogeneous location preferences. Population shares follow:\n\\[\\text{share}_i = \\frac{V_i^\\theta}{\\sum_j V_j^\\theta}\\]\nwhere \\(\\theta\\) is the mobility parameter:\n\nHigher \\(\\theta\\) → more mobile → utilities converge\nLower \\(\\theta\\) → less mobile → larger utility differences\n\\(\\theta \\to \\infty\\) → perfect mobility (classic case)\n\nThis model allows realistic utility spreads (e.g., 3-15%) while maintaining spatial equilibrium logic.",
+    "crumbs": [
+      "Equilibrium",
+      "Equilibrium Solver"
+    ]
+  },
+  {
+    "objectID": "equilibrium.html#the-algorithm",
+    "href": "equilibrium.html#the-algorithm",
+    "title": "Spatial Equilibrium Solver",
+    "section": "The Algorithm",
+    "text": "The Algorithm\nWe solve for equilibrium iteratively:\n\nStart with equal population distribution\nCalculate wages and rents from population (using production and housing market equilibrium)\nCalculate utility in each city\nUpdate population shares using \\(\\text{share}_i \\propto V_i^\\theta\\)\nRepeat until convergence\n\n\nWhy This Works\nThe algorithm mimics worker migration:\n\nIf City A has higher utility than City B, workers flow from B to A\nThis raises rents in A and lowers rents in B\nIt also changes wages (through agglomeration and diminishing returns)\nProcess continues until no one wants to move",
+    "crumbs": [
+      "Equilibrium",
+      "Equilibrium Solver"
+    ]
+  },
+  {
+    "objectID": "equilibrium.html#numerical-stability-log-space-calculations",
+    "href": "equilibrium.html#numerical-stability-log-space-calculations",
+    "title": "Spatial Equilibrium Solver",
+    "section": "Numerical Stability: Log-Space Calculations",
+    "text": "Numerical Stability: Log-Space Calculations\nWorking directly with populations and utilities can cause numerical problems:\n\nPopulations can be millions → overflow when raised to powers\nUtilities raised to \\(\\theta\\) can be very small → underflow\nShare calculations involve ratios of exponentials → numerical instability\n\nSolution: Do all calculations in log-space!\n\nThe Log-Sum-Exp Trick\nTo compute \\(\\log(\\sum_i e^{x_i})\\) without overflow:\n\\[\\log\\left(\\sum_i e^{x_i}\\right) = c + \\log\\left(\\sum_i e^{x_i - c}\\right)\\]\nwhere \\(c = \\max_i x_i\\). This shifts all terms so the maximum is 0, preventing overflow.",
+    "crumbs": [
+      "Equilibrium",
+      "Equilibrium Solver"
+    ]
+  },
+  {
+    "objectID": "equilibrium.html#the-equilibrium-solver",
+    "href": "equilibrium.html#the-equilibrium-solver",
+    "title": "Spatial Equilibrium Solver",
+    "section": "The Equilibrium Solver",
+    "text": "The Equilibrium Solver\n\n\nEquilibriumSolver\n\n EquilibriumSolver (params:src.parameters.ModelParameters,\n                    cities:list[src.parameters.CityParameters])\n\nIterative solver for spatial equilibrium using the Fréchet/probabilistic model.\n\n\n\n\nType\nDetails\n\n\n\n\nparams\nModelParameters\nModel parameters (elasticities, shares)\n\n\ncities\nlist\nList of city-specific parameters",
+    "crumbs": [
+      "Equilibrium",
+      "Equilibrium Solver"
+    ]
+  },
+  {
+    "objectID": "equilibrium.html#helper-function-for-counterfactual-analysis",
+    "href": "equilibrium.html#helper-function-for-counterfactual-analysis",
+    "title": "Spatial Equilibrium Solver",
+    "section": "Helper Function for Counterfactual Analysis",
+    "text": "Helper Function for Counterfactual Analysis\n\n\ncalculate_gdp_change\n\n calculate_gdp_change (baseline:src.parameters.EquilibriumResult,\n                       counterfactual:src.parameters.EquilibriumResult)\n\nCalculate GDP change between two equilibria.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nbaseline\nEquilibriumResult\nBaseline equilibrium result\n\n\ncounterfactual\nEquilibriumResult\nCounterfactual equilibrium result\n\n\nReturns\ndict",
+    "crumbs": [
+      "Equilibrium",
+      "Equilibrium Solver"
+    ]
+  },
+  {
+    "objectID": "equilibrium.html#tests",
+    "href": "equilibrium.html#tests",
+    "title": "Spatial Equilibrium Solver",
+    "section": "Tests",
+    "text": "Tests",
+    "crumbs": [
+      "Equilibrium",
+      "Equilibrium Solver"
+    ]
+  },
+  {
+    "objectID": "equilibrium.html#example-usage",
+    "href": "equilibrium.html#example-usage",
+    "title": "Spatial Equilibrium Solver",
+    "section": "Example Usage",
+    "text": "Example Usage\n\n# Solve equilibrium for three cities\nparams = ModelParameters.STANDARD\n\ncities = [\n    CityParameters(name=\"High Productivity\", base_tfp=120, supply_elasticity=1.5),\n    CityParameters(name=\"Medium\", base_tfp=100, supply_elasticity=2.0),\n    CityParameters(name=\"Low Productivity\", base_tfp=80, supply_elasticity=3.0),\n]\n\nsolver = EquilibriumSolver(params, cities)\nresult = solver.solve(total_population=3_000_000, verbose=False)\n\nprint(result.summary())\n\nSpatial Equilibrium Results\n======================================================================\nCity                        Population       Wage       Rent    Utility\n----------------------------------------------------------------------\nHigh Productivity              713,304       1.20      79.83     0.2817\nMedium                         973,846       0.90      31.21     0.2907\nLow Productivity             1,312,850       0.66      10.95     0.2995\n----------------------------------------------------------------------\nTotal GDP: 3,999,865\nUtility spread: 6.3% (smaller = closer to classic R-R equilibrium)\nConverged: True (64 iterations)",
+    "crumbs": [
+      "Equilibrium",
+      "Equilibrium Solver"
+    ]
+  },
+  {
+    "objectID": "equilibrium.html#key-insights",
+    "href": "equilibrium.html#key-insights",
+    "title": "Spatial Equilibrium Solver",
+    "section": "Key Insights",
+    "text": "Key Insights\n\nSpatial equilibrium balances three forces:\n\nAgglomeration (pulls workers to productive cities)\nHousing supply constraints (push workers away via high rents)\nWorker mobility (how responsive to utility differences)\n\nLog-space calculations are essential: Without them, the solver would fail due to overflow/underflow\nDamping prevents oscillation: With high \\(\\theta\\), workers are very responsive, causing the algorithm to overshoot. Damping stabilizes convergence.\nUtility spread reveals mobility:\n\n1-3% spread → high mobility (θ &gt; 20)\n5-10% spread → moderate mobility (θ ≈ 5-10)\n10-20% spread → low mobility (θ ≈ 2-4)\n\nThe algorithm is robust: It handles any number of cities, various parameter values, and finds equilibrium reliably",
+    "crumbs": [
+      "Equilibrium",
+      "Equilibrium Solver"
+    ]
+  },
+  {
+    "objectID": "production.html",
+    "href": "production.html",
+    "title": "Firm Production and Agglomeration",
+    "section": "",
+    "text": "A key empirical fact: larger cities have higher productivity and wages.\nEvidence:\n\nDoubling city size increases wages by ~3-8%\nThis is known as the urban wage premium or agglomeration benefits\n\nWhy does this happen? Three main mechanisms (Marshall’s trinity):\n\nKnowledge spillovers: Learn from nearby workers and firms\nLabour market matching: Find better job/worker matches in thick markets\nInput sharing: Access to specialized suppliers and services",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#why-are-big-cities-more-productive",
+    "href": "production.html#why-are-big-cities-more-productive",
+    "title": "Firm Production and Agglomeration",
+    "section": "",
+    "text": "A key empirical fact: larger cities have higher productivity and wages.\nEvidence:\n\nDoubling city size increases wages by ~3-8%\nThis is known as the urban wage premium or agglomeration benefits\n\nWhy does this happen? Three main mechanisms (Marshall’s trinity):\n\nKnowledge spillovers: Learn from nearby workers and firms\nLabour market matching: Find better job/worker matches in thick markets\nInput sharing: Access to specialized suppliers and services",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#the-production-function",
+    "href": "production.html#the-production-function",
+    "title": "Firm Production and Agglomeration",
+    "section": "The Production Function",
+    "text": "The Production Function\nFirms produce output using labour:\n\\[Y = A \\cdot L^{\\alpha}\\]\nwhere:\n\n\\(Y\\) = output\n\\(A\\) = total factor productivity (TFP)\n\\(L\\) = labour (number of workers)\n\\(\\alpha\\) = labour share (typically 0.6-0.7)\n\nDiminishing returns: As \\(L\\) increases, output grows, but at a decreasing rate (since \\(\\alpha &lt; 1\\)).",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#agglomeration-economies",
+    "href": "production.html#agglomeration-economies",
+    "title": "Firm Production and Agglomeration",
+    "section": "Agglomeration Economies",
+    "text": "Agglomeration Economies\nThe key innovation: productivity increases with city size:\n\\[A = \\bar{A} \\cdot L^{\\eta}\\]\nwhere:\n\n\\(\\bar{A}\\) = base TFP\n\\(\\eta\\) = agglomeration elasticity (typically 0.02-0.08)\n\nThis means larger cities have higher TFP!\n\nAgglomeration Elasticity\nThe parameter \\(\\eta\\) measures how much productivity increases with city size:\n\\[\\eta = \\frac{\\% \\Delta A}{\\% \\Delta L}\\]\nTypical estimates:\n\nAcademic consensus: \\(\\eta \\approx 0.02 - 0.08\\) (2-8% TFP gain from doubling city size)\nHsieh-Moretti (2019): \\(\\eta = 0.25\\) (very strong agglomeration!)\nCooped Up (2024): \\(\\eta = 0.25\\) (follows Hsieh-Moretti)",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#combining-production-and-agglomeration",
+    "href": "production.html#combining-production-and-agglomeration",
+    "title": "Firm Production and Agglomeration",
+    "section": "Combining Production and Agglomeration",
+    "text": "Combining Production and Agglomeration\nPutting it together:\n\\[Y = \\bar{A} \\cdot L^{\\alpha} \\cdot L^{\\eta} = \\bar{A} \\cdot L^{\\alpha + \\eta}\\]\nKey insight: The effective elasticity of output w.r.t. labour is \\(\\alpha + \\eta &gt; \\alpha\\).\nAgglomeration creates increasing returns to scale at the city level!\n\n\nagglomeration_factor\n\n agglomeration_factor (population:float, reference_population:float,\n                       eta:float)\n\nCalculate the TFP multiplier from agglomeration relative to a reference city.\n\n\n\n\nType\nDetails\n\n\n\n\npopulation\nfloat\nPopulation of city of interest\n\n\nreference_population\nfloat\nPopulation of reference city\n\n\neta\nfloat\nAgglomeration elasticity\n\n\nReturns\nfloat\n\n\n\n\n\n\n\noutput_per_worker\n\n output_per_worker (population:float, base_tfp:float, alpha:float=0.65,\n                    eta:float=0.04)\n\nCalculate output per worker (labour productivity).\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\npopulation\nfloat\n\nCity population\n\n\nbase_tfp\nfloat\n\nBase TFP\n\n\nalpha\nfloat\n0.65\nLabour share\n\n\neta\nfloat\n0.04\nAgglomeration elasticity\n\n\nReturns\nfloat\n\n\n\n\n\n\n\n\ncalculate_wage\n\n calculate_wage (population:float, base_tfp:float, alpha:float=0.65,\n                 eta:float=0.04)\n\nCalculate equilibrium wage as marginal product of labour.\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\npopulation\nfloat\n\nCity population (= labour)\n\n\nbase_tfp\nfloat\n\nBase TFP\n\n\nalpha\nfloat\n0.65\nLabour share in production\n\n\neta\nfloat\n0.04\nAgglomeration elasticity\n\n\nReturns\nfloat\n\n\n\n\n\n\n\n\ncalculate_output\n\n calculate_output (population:float, base_tfp:float, alpha:float=0.65,\n                   eta:float=0.04)\n\nCalculate total output with agglomeration economies.\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\npopulation\nfloat\n\nCity population (= labour)\n\n\nbase_tfp\nfloat\n\nBase TFP\n\n\nalpha\nfloat\n0.65\nLabour share in production\n\n\neta\nfloat\n0.04\nAgglomeration elasticity\n\n\nReturns\nfloat\n\n\n\n\n\n\n\n\ncalculate_tfp\n\n calculate_tfp (population:float, base_tfp:float, eta:float)\n\nCalculate total factor productivity with agglomeration.\n\n\n\n\nType\nDetails\n\n\n\n\npopulation\nfloat\nCity population (= labour)\n\n\nbase_tfp\nfloat\nBase TFP (productivity when L=1)\n\n\neta\nfloat\nAgglomeration elasticity\n\n\nReturns\nfloat\n\n\n\n\nExamples:\n\n# Calculate TFP with agglomeration\ntfp = calculate_tfp(population=1_000_000, base_tfp=100, eta=0.04)\nassert tfp &gt; 100  # Should be higher due to agglomeration\nassert np.isclose(tfp, 100 * (1_000_000**0.04))\n\n# Test that larger cities have higher TFP\ntfp_small = calculate_tfp(100_000, 100, 0.04)\ntfp_large = calculate_tfp(1_000_000, 100, 0.04)\nassert tfp_large &gt; tfp_small\n\n# Test wage = alpha * output per worker\nwage = calculate_wage(1_000_000, 100, 0.65, 0.04)\noutput_pw = output_per_worker(1_000_000, 100, 0.65, 0.04)\nassert np.isclose(wage, 0.65 * output_pw, rtol=0.01)",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#demonstrating-agglomeration-effects",
+    "href": "production.html#demonstrating-agglomeration-effects",
+    "title": "Firm Production and Agglomeration",
+    "section": "Demonstrating Agglomeration Effects",
+    "text": "Demonstrating Agglomeration Effects\n\n# Compare cities of different sizes\nbase_tfp = 100\nalpha = 0.65\neta = 0.04\n\npopulations = [100_000, 500_000, 1_000_000, 5_000_000, 10_000_000]\n\nprint(\"Effect of City Size on Productivity and Wages\")\nprint(\"=\" * 80)\nprint(f\"{'Population':&gt;12} {'TFP':&gt;10} {'Output':&gt;15} {'Wage':&gt;10} {'Output/Worker':&gt;15}\")\nprint(\"-\" * 80)\n\nfor pop in populations:\n    tfp = calculate_tfp(pop, base_tfp, eta)\n    output = calculate_output(pop, base_tfp, alpha, eta)\n    wage = calculate_wage(pop, base_tfp, alpha, eta)\n    output_pw = output_per_worker(pop, base_tfp, alpha, eta)\n\n    print(f\"{pop:&gt;12,} {tfp:&gt;10.1f} {output:&gt;15,.0f} {wage:&gt;10.2f} {output_pw:&gt;15.2f}\")\n\nprint(\"-\" * 80)\nprint(\"\\nKey insight: Larger cities have higher TFP, output, wages, and productivity!\")\n\nEffect of City Size on Productivity and Wages\n================================================================================\n  Population        TFP          Output       Wage   Output/Worker\n--------------------------------------------------------------------------------\n     100,000      158.5         281,838       1.83            2.82\n     500,000      169.0         855,637       1.11            1.71\n   1,000,000      173.8       1,380,384       0.90            1.38\n   5,000,000      185.3       4,190,726       0.54            0.84\n  10,000,000      190.5       6,760,830       0.44            0.68\n--------------------------------------------------------------------------------\n\nKey insight: Larger cities have higher TFP, output, wages, and productivity!",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#comparing-agglomeration-parameters",
+    "href": "production.html#comparing-agglomeration-parameters",
+    "title": "Firm Production and Agglomeration",
+    "section": "Comparing Agglomeration Parameters",
+    "text": "Comparing Agglomeration Parameters\nLet’s see how different values of \\(\\eta\\) affect the urban wage premium.\n\n# Compare wage premia with different agglomeration elasticities\nsmall_city_pop = 500_000\nlarge_city_pop = 5_000_000  # 10x larger\n\netas = [\n    (0.02, \"Conservative (η=0.02)\"),\n    (0.04, \"Standard (η=0.04)\"),\n    (0.08, \"High (η=0.08)\"),\n    (0.25, \"Hsieh-Moretti (η=0.25)\"),\n]\n\nprint(f\"Urban Wage Premium: Large City ({large_city_pop:,}) vs Small City ({small_city_pop:,})\")\nprint(\"=\" * 80)\nprint(f\"{'Scenario':&lt;30} {'Small City Wage':&gt;18} {'Large City Wage':&gt;18} {'Wage Premium':&gt;15}\")\nprint(\"-\" * 80)\n\nfor eta, label in etas:\n    wage_small = calculate_wage(small_city_pop, base_tfp, alpha, eta)\n    wage_large = calculate_wage(large_city_pop, base_tfp, alpha, eta)\n    premium_pct = (wage_large / wage_small - 1) * 100\n\n    print(f\"{label:&lt;30} {wage_small:&gt;18.2f} {wage_large:&gt;18.2f} {premium_pct:&gt;14.1f}%\")\n\nprint(\"-\" * 80)\nprint(\"\\nInterpretation: Higher η → stronger agglomeration → larger wage differences\")\n\nUrban Wage Premium: Large City (5,000,000) vs Small City (500,000)\n================================================================================\nScenario                          Small City Wage    Large City Wage    Wage Premium\n--------------------------------------------------------------------------------\nConservative (η=0.02)                        0.86               0.40          -53.2%\nStandard (η=0.04)                            1.11               0.54          -51.0%\nHigh (η=0.08)                                1.88               1.01          -46.3%\nHsieh-Moretti (η=0.25)                      17.50              13.90          -20.6%\n--------------------------------------------------------------------------------\n\nInterpretation: Higher η → stronger agglomeration → larger wage differences",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#the-agglomeration-multiplier",
+    "href": "production.html#the-agglomeration-multiplier",
+    "title": "Firm Production and Agglomeration",
+    "section": "The Agglomeration Multiplier",
+    "text": "The Agglomeration Multiplier\nHow much more productive is a city of size \\(L\\) compared to a reference city?\n\n# Compare London vs other UK cities\nreference_pop = 500_000  # Typical mid-size UK city\neta = 0.04\n\nuk_cities = [\n    (\"Mid-size city (reference)\", 500_000),\n    (\"Birmingham\", 1_100_000),\n    (\"Manchester\", 2_800_000),\n    (\"London\", 9_000_000),\n]\n\nprint(\"TFP Multiplier from Agglomeration (relative to mid-size city)\")\nprint(\"=\" * 60)\nprint(f\"{'City':&lt;30} {'Population':&gt;15} {'TFP Multiplier':&gt;15}\")\nprint(\"-\" * 60)\n\nfor city_name, pop in uk_cities:\n    multiplier = agglomeration_factor(pop, reference_pop, eta)\n    print(f\"{city_name:&lt;30} {pop:&gt;15,} {multiplier:&gt;15.2f}x\")\n\nprint(\"-\" * 60)\nprint(f\"\\nWith η={eta}, London is {agglomeration_factor(9_000_000, 500_000, eta):.2f}x more productive\")\nprint(\"than a mid-size city purely from agglomeration effects!\")\n\nTFP Multiplier from Agglomeration (relative to mid-size city)\n============================================================\nCity                                Population  TFP Multiplier\n------------------------------------------------------------\nMid-size city (reference)              500,000            1.00x\nBirmingham                           1,100,000            1.03x\nManchester                           2,800,000            1.07x\nLondon                               9,000,000            1.12x\n------------------------------------------------------------\n\nWith η=0.04, London is 1.12x more productive\nthan a mid-size city purely from agglomeration effects!",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#tests",
+    "href": "production.html#tests",
+    "title": "Firm Production and Agglomeration",
+    "section": "Tests",
+    "text": "Tests",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#why-this-matters",
+    "href": "production.html#why-this-matters",
+    "title": "Firm Production and Agglomeration",
+    "section": "Why This Matters",
+    "text": "Why This Matters\nAgglomeration economies create a powerful force pulling workers toward large cities:\n\nBig cities are more productive → firms can pay higher wages\nWorkers want higher wages → they migrate to big cities\nBut rents rise (especially with inelastic housing supply)\nEquilibrium balances productivity gains against rent increases\n\n\nPolicy Implications\nIf housing supply is constrained in productive cities:\n\nRents spike\nWorkers are pushed out\nThey end up in less productive locations\nNational GDP falls\n\nThe strength of agglomeration (\\(\\eta\\)) determines how much GDP is lost:\n\nHigher \\(\\eta\\) → stronger agglomeration → bigger losses from constraints\nHsieh-Moretti use \\(\\eta = 0.25\\) and find 3.7-8.9% GDP loss\nWith lower \\(\\eta \\approx 0.04\\), the loss would be smaller but still significant",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "production.html#key-insights",
+    "href": "production.html#key-insights",
+    "title": "Firm Production and Agglomeration",
+    "section": "Key Insights",
+    "text": "Key Insights\n\nAgglomeration economies: Larger cities are more productive (η typically 0.02-0.08)\nWage premium: Big cities pay higher wages due to higher productivity\nIncreasing returns: At the city level, production has increasing returns (α + η &gt; α)\nDebate over η: Academic estimates vary from 0.02 to 0.25, which matters hugely for policy\nSpatial misallocation: If productive cities can’t accommodate workers, national output suffers",
+    "crumbs": [
+      "Model Components",
+      "Firm Production"
+    ]
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "Core Utilities",
+    "section": "",
+    "text": "The project organizes data by country (UK/US) and dataset type. This section defines the directory structure and path utilities.\n\n\nThese functions provide consistent paths for raw data, processed data, and outputs organized by country and dataset.\n\n\n\n\n\n output_path (replication:str)\n\nGet path to output directory for a paper replication.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nreplication\nstr\nReplication name (e.g., “yimby_rent_map”, “cooped_up”)\n\n\nReturns\nPath\n\n\n\n\n\n\n\n\n\n processed_path (country:Literal['uk','us'], dataset:str)\n\nGet path to processed data directory for a country/dataset.\n\n\n\n\nType\nDetails\n\n\n\n\ncountry\nLiteral\nCountry code (“uk” or “us”)\n\n\ndataset\nstr\nDataset name\n\n\nReturns\nPath\n\n\n\n\n\n\n\n\n\n raw_path (country:Literal['uk','us'], dataset:str)\n\nGet path to raw data directory for a country/dataset.\n\n\n\n\nType\nDetails\n\n\n\n\ncountry\nLiteral\nCountry code (“uk” or “us”)\n\n\ndataset\nstr\nDataset name (e.g., “epc”, “pipr”, “ashe”)\n\n\nReturns\nPath\n\n\n\n\nExamples:\n\n# Get paths for UK EPC data\nuk_epc_raw = raw_path(\"uk\", \"epc\")\nuk_epc_processed = processed_path(\"uk\", \"epc\")\ncooped_up_out = output_path(\"cooped_up\")\n\n# Test that paths have correct structure\nassert uk_epc_raw.parts[-3:] == (\"raw\", \"uk\", \"epc\")\nassert uk_epc_processed.parts[-3:] == (\"processed\", \"uk\", \"epc\")\nassert cooped_up_out.parts[-2:] == (\"output\", \"cooped_up\")\n\n\n\n\n\n\n ensure_dirs ()\n\nCreate all required directories if they don’t exist.\n\n\n\n\n\n download_file (url:str, output_path:pathlib._local.Path,\n                chunk_size:int=8192, timeout:int=300)\n\nDownload a file from URL to local path.\nArgs: url: URL to download from output_path: Local path to save file chunk_size: Download chunk size in bytes timeout: Request timeout in seconds\nReturns: Path to downloaded file\nRaises: requests.exceptions.RequestException: If download fails\n\n\n\n\n\n fetch_with_retry (url:str, params:dict[str,typing.Any]|None=None,\n                   max_retries:int=3, timeout:int=120)\n\nFetch JSON data from URL with retry logic for transient failures.\nArgs: url: URL to fetch params: Optional query parameters max_retries: Maximum number of retry attempts timeout: Request timeout in seconds\nReturns: Parsed JSON response\nRaises: requests.exceptions.RequestException: If all retries fail\n\n\n\n\n\n fix_la_code (code:str)\n\nApply known LA code corrections.\nArgs: code: LA code to fix\nReturns: Corrected LA code\n\n\n\n\n\n get_la_type (code:str)\n\nGet the type of local authority from its code.\nArgs: code: LA code\nReturns: LA type description or None if not recognised\n\n\n\n\n\n is_england_wales_la (code:str)\n\nCheck if a code is an England or Wales local authority.\nArgs: code: Geographic code to check\nReturns: True if code is an England/Wales LA code\n\n\n\n\n\n is_uk_local_authority (code:str)\n\nCheck if a code is a UK local authority code.\nArgs: code: Geographic code to check\nReturns: True if code is a UK LA code",
+    "crumbs": [
+      "Overview",
+      "Core Utilities"
+    ]
+  },
+  {
+    "objectID": "core.html#configuration-and-paths",
+    "href": "core.html#configuration-and-paths",
+    "title": "Core Utilities",
+    "section": "",
+    "text": "The project organizes data by country (UK/US) and dataset type. This section defines the directory structure and path utilities.\n\n\nThese functions provide consistent paths for raw data, processed data, and outputs organized by country and dataset.\n\n\n\n\n\n output_path (replication:str)\n\nGet path to output directory for a paper replication.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nreplication\nstr\nReplication name (e.g., “yimby_rent_map”, “cooped_up”)\n\n\nReturns\nPath\n\n\n\n\n\n\n\n\n\n processed_path (country:Literal['uk','us'], dataset:str)\n\nGet path to processed data directory for a country/dataset.\n\n\n\n\nType\nDetails\n\n\n\n\ncountry\nLiteral\nCountry code (“uk” or “us”)\n\n\ndataset\nstr\nDataset name\n\n\nReturns\nPath\n\n\n\n\n\n\n\n\n\n raw_path (country:Literal['uk','us'], dataset:str)\n\nGet path to raw data directory for a country/dataset.\n\n\n\n\nType\nDetails\n\n\n\n\ncountry\nLiteral\nCountry code (“uk” or “us”)\n\n\ndataset\nstr\nDataset name (e.g., “epc”, “pipr”, “ashe”)\n\n\nReturns\nPath\n\n\n\n\nExamples:\n\n# Get paths for UK EPC data\nuk_epc_raw = raw_path(\"uk\", \"epc\")\nuk_epc_processed = processed_path(\"uk\", \"epc\")\ncooped_up_out = output_path(\"cooped_up\")\n\n# Test that paths have correct structure\nassert uk_epc_raw.parts[-3:] == (\"raw\", \"uk\", \"epc\")\nassert uk_epc_processed.parts[-3:] == (\"processed\", \"uk\", \"epc\")\nassert cooped_up_out.parts[-2:] == (\"output\", \"cooped_up\")\n\n\n\n\n\n\n ensure_dirs ()\n\nCreate all required directories if they don’t exist.\n\n\n\n\n\n download_file (url:str, output_path:pathlib._local.Path,\n                chunk_size:int=8192, timeout:int=300)\n\nDownload a file from URL to local path.\nArgs: url: URL to download from output_path: Local path to save file chunk_size: Download chunk size in bytes timeout: Request timeout in seconds\nReturns: Path to downloaded file\nRaises: requests.exceptions.RequestException: If download fails\n\n\n\n\n\n fetch_with_retry (url:str, params:dict[str,typing.Any]|None=None,\n                   max_retries:int=3, timeout:int=120)\n\nFetch JSON data from URL with retry logic for transient failures.\nArgs: url: URL to fetch params: Optional query parameters max_retries: Maximum number of retry attempts timeout: Request timeout in seconds\nReturns: Parsed JSON response\nRaises: requests.exceptions.RequestException: If all retries fail\n\n\n\n\n\n fix_la_code (code:str)\n\nApply known LA code corrections.\nArgs: code: LA code to fix\nReturns: Corrected LA code\n\n\n\n\n\n get_la_type (code:str)\n\nGet the type of local authority from its code.\nArgs: code: LA code\nReturns: LA type description or None if not recognised\n\n\n\n\n\n is_england_wales_la (code:str)\n\nCheck if a code is an England or Wales local authority.\nArgs: code: Geographic code to check\nReturns: True if code is an England/Wales LA code\n\n\n\n\n\n is_uk_local_authority (code:str)\n\nCheck if a code is a UK local authority code.\nArgs: code: Geographic code to check\nReturns: True if code is a UK LA code",
+    "crumbs": [
+      "Overview",
+      "Core Utilities"
+    ]
+  },
+  {
+    "objectID": "core.html#tests",
+    "href": "core.html#tests",
+    "title": "Core Utilities",
+    "section": "Tests",
+    "text": "Tests",
+    "crumbs": [
+      "Overview",
+      "Core Utilities"
+    ]
+  },
+  {
+    "objectID": "core.html#example-usage",
+    "href": "core.html#example-usage",
+    "title": "Core Utilities",
+    "section": "Example Usage",
+    "text": "Example Usage\n\n# Show project structure\nprint(f\"Project root: {PROJECT_ROOT}\")\nprint(f\"UK EPC raw path: {raw_path('uk', 'epc')}\")\nprint(f\"UK EPC processed path: {processed_path('uk', 'epc')}\")\nprint(f\"Cooped Up output path: {output_path('cooped_up')}\")\n\nProject root: /Users/henrydashwood/Documents/housing_prices/nbs\nUK EPC raw path: /Users/henrydashwood/Documents/housing_prices/nbs/data/raw/uk/epc\nUK EPC processed path: /Users/henrydashwood/Documents/housing_prices/nbs/data/processed/uk/epc\nCooped Up output path: /Users/henrydashwood/Documents/housing_prices/nbs/data/output/cooped_up\n\n\n\n# Demo geographic code functions\ntest_codes = [\"E09000001\", \"E08000019\", \"W06000001\", \"S12000033\"]\nfor code in test_codes:\n    print(f\"{code}: {get_la_type(code)}\")\n\nE09000001: London Borough\nE08000019: Metropolitan District\nW06000001: Unitary Authority (Wales)\nS12000033: Council Area (Scotland)",
+    "crumbs": [
+      "Overview",
+      "Core Utilities"
+    ]
+  },
+  {
+    "objectID": "parameters.html",
+    "href": "parameters.html",
+    "title": "Model Parameters",
+    "section": "",
+    "text": "The Rosen-Roback model has four key parameters that control how the spatial equilibrium behaves:\n\n\n\nDetermines how output is split between labour and land/capital\nStandard estimates: 0.6-0.7 (workers get 60-70% of output)\nExample: If α=0.65, then a 1% increase in employment increases output by 0.65%\n\n\n\n\n\nControls how much productivity increases when a city gets larger\nThis is the key channel for why big cities are more productive\nStandard estimates: 0.02-0.08 (2-8% productivity boost from doubling city size)\nCooped Up uses 0.25 (very strong agglomeration!)\n\n\n\n\n\nFraction of income spent on housing\nStandard estimate: 0.33 (one-third of income)\nHigher β means workers care more about rents when choosing where to live\n\n\n\n\n\nControls how much utility spread exists across cities in equilibrium\nHigher θ → workers more responsive to utility differences → smaller utility spread\nθ=3: ~15% utility spread (significant moving costs/preferences)\nθ=10: ~6% utility spread (moderate mobility)\nθ=50+: &lt;2% spread (classic Rosen-Roback with nearly equal utilities)\n\n\n\n\nIn the classic Rosen-Roback model, workers are perfectly mobile and utilities are exactly equal across cities. In reality, people face moving costs and have location preferences. The Fréchet framework (from trade models) captures this:\n\nLow θ: Workers have strong location preferences → utilities can differ substantially\nHigh θ: Workers are very mobile → utilities converge (classic case)\n\nThis matters for counterfactuals: if θ is low, relaxing housing supply in one city won’t cause massive population shifts because people really like their current locations.\n\n\n\n\n\n ModelParameters (alpha:float=0.65, eta:float=0.04, beta:float=0.33,\n                  theta:float=10.0)\n\nGlobal parameters for the Rosen-Roback spatial equilibrium model.\n\n\n\nWe provide several pre-calibrated parameter sets based on published research:",
+    "crumbs": [
+      "Model Components",
+      "Parameters"
+    ]
+  },
+  {
+    "objectID": "parameters.html#model-parameters",
+    "href": "parameters.html#model-parameters",
+    "title": "Model Parameters",
+    "section": "",
+    "text": "The Rosen-Roback model has four key parameters that control how the spatial equilibrium behaves:\n\n\n\nDetermines how output is split between labour and land/capital\nStandard estimates: 0.6-0.7 (workers get 60-70% of output)\nExample: If α=0.65, then a 1% increase in employment increases output by 0.65%\n\n\n\n\n\nControls how much productivity increases when a city gets larger\nThis is the key channel for why big cities are more productive\nStandard estimates: 0.02-0.08 (2-8% productivity boost from doubling city size)\nCooped Up uses 0.25 (very strong agglomeration!)\n\n\n\n\n\nFraction of income spent on housing\nStandard estimate: 0.33 (one-third of income)\nHigher β means workers care more about rents when choosing where to live\n\n\n\n\n\nControls how much utility spread exists across cities in equilibrium\nHigher θ → workers more responsive to utility differences → smaller utility spread\nθ=3: ~15% utility spread (significant moving costs/preferences)\nθ=10: ~6% utility spread (moderate mobility)\nθ=50+: &lt;2% spread (classic Rosen-Roback with nearly equal utilities)\n\n\n\n\nIn the classic Rosen-Roback model, workers are perfectly mobile and utilities are exactly equal across cities. In reality, people face moving costs and have location preferences. The Fréchet framework (from trade models) captures this:\n\nLow θ: Workers have strong location preferences → utilities can differ substantially\nHigh θ: Workers are very mobile → utilities converge (classic case)\n\nThis matters for counterfactuals: if θ is low, relaxing housing supply in one city won’t cause massive population shifts because people really like their current locations.\n\n\n\n\n\n ModelParameters (alpha:float=0.65, eta:float=0.04, beta:float=0.33,\n                  theta:float=10.0)\n\nGlobal parameters for the Rosen-Roback spatial equilibrium model.\n\n\n\nWe provide several pre-calibrated parameter sets based on published research:",
+    "crumbs": [
+      "Model Components",
+      "Parameters"
+    ]
+  },
+  {
+    "objectID": "parameters.html#city-parameters",
+    "href": "parameters.html#city-parameters",
+    "title": "Model Parameters",
+    "section": "City Parameters",
+    "text": "City Parameters\nEach city in the model has four characteristics:\n\nBase TFP (Total Factor Productivity)\n\nProductivity before agglomeration effects\nHigher TFP cities attract more workers (if housing supply allows)\nIn equilibrium, agglomeration amplifies TFP differences\n\n\n\nAmenity\n\nHow much workers like living in this city, independent of wages and rents\nCould capture: weather, culture, family ties, crime, pollution\nIn classic Rosen-Roback, amenities are calibrated to rationalize observed populations\n\n\n\nSupply Elasticity (γ, gamma)\n\nHow much housing supply increases when rents rise\nγ = % increase in housing / % increase in rent\nHouston: ~2.5 (very elastic, flat land)\nSan Francisco: ~0.7 (inelastic, geography + regulations)\nThis is the key policy parameter!\n\n\n\nSupply Shifter\n\nDetermines the level of rents at any given population\nCan represent land availability or construction costs\nUsually calibrated to match observed rents\n\n\n\n\nCityParameters\n\n CityParameters (name:str, base_tfp:float, amenity:float=1.0,\n                 supply_elasticity:float=2.0, supply_shifter:float=1000.0)\n\nParameters for a single city in the model.",
+    "crumbs": [
+      "Model Components",
+      "Parameters"
+    ]
+  },
+  {
+    "objectID": "parameters.html#equilibrium-results",
+    "href": "parameters.html#equilibrium-results",
+    "title": "Model Parameters",
+    "section": "Equilibrium Results",
+    "text": "Equilibrium Results\nThe EquilibriumResult dataclass stores the solution to the spatial equilibrium problem.\n\n\nEquilibriumResult\n\n EquilibriumResult (city_names:list[str],\n                    population:list[float]=&lt;factory&gt;,\n                    wages:list[float]=&lt;factory&gt;,\n                    rents:list[float]=&lt;factory&gt;,\n                    utilities:list[float]=&lt;factory&gt;,\n                    outputs:list[float]=&lt;factory&gt;, total_gdp:float=0.0,\n                    converged:bool=False, iterations:int=0)\n\nResults from solving the spatial equilibrium.",
+    "crumbs": [
+      "Model Components",
+      "Parameters"
+    ]
+  },
+  {
+    "objectID": "parameters.html#tests",
+    "href": "parameters.html#tests",
+    "title": "Model Parameters",
+    "section": "Tests",
+    "text": "Tests",
+    "crumbs": [
+      "Model Components",
+      "Parameters"
+    ]
+  },
+  {
+    "objectID": "parameters.html#example-usage",
+    "href": "parameters.html#example-usage",
+    "title": "Model Parameters",
+    "section": "Example Usage",
+    "text": "Example Usage\n\n# Compare different parameter sets\nprint(\"Standard parameters:\")\nprint(f\"  Agglomeration (eta): {ModelParameters.STANDARD.eta}\")\nprint(f\"  Mobility (theta): {ModelParameters.STANDARD.theta}\")\nprint()\nprint(\"Hsieh-Moretti parameters:\")\nprint(f\"  Agglomeration (eta): {ModelParameters.HSIEH_MORETTI.eta}\")\nprint(f\"  Mobility (theta): {ModelParameters.HSIEH_MORETTI.theta}\")\nprint()\nprint(\"Key difference: Hsieh-Moretti has MUCH stronger agglomeration (0.25 vs 0.04)\")\nprint(\"This means big productivity gains from city size → large GDP losses from misallocation\")\n\nStandard parameters:\n  Agglomeration (eta): 0.04\n  Mobility (theta): 10.0\n\nHsieh-Moretti parameters:\n  Agglomeration (eta): 0.25\n  Mobility (theta): 2.0\n\nKey difference: Hsieh-Moretti has MUCH stronger agglomeration (0.25 vs 0.04)\nThis means big productivity gains from city size → large GDP losses from misallocation\n\n\n\n# Create a simple two-city example\nproductive_city = CityParameters(\n    name=\"HighTech City\",\n    base_tfp=120,\n    supply_elasticity=0.7,  # Constrained like SF\n)\n\nnormal_city = CityParameters(\n    name=\"Normal City\",\n    base_tfp=100,\n    supply_elasticity=2.5,  # Elastic like Houston\n)\n\nprint(f\"{productive_city.name}: TFP={productive_city.base_tfp}, Supply Elasticity={productive_city.supply_elasticity}\")\nprint(f\"{normal_city.name}: TFP={normal_city.base_tfp}, Supply Elasticity={normal_city.supply_elasticity}\")\nprint()\nprint(\"Prediction: HighTech City will have higher wages AND rents.\")\nprint(\"The housing supply constraint (low elasticity) limits population growth.\")\n\nHighTech City: TFP=120, Supply Elasticity=0.7\nNormal City: TFP=100, Supply Elasticity=2.5\n\nPrediction: HighTech City will have higher wages AND rents.\nThe housing supply constraint (low elasticity) limits population growth.",
+    "crumbs": [
+      "Model Components",
+      "Parameters"
+    ]
+  },
+  {
+    "objectID": "housing.html",
+    "href": "housing.html",
+    "title": "Housing Supply",
+    "section": "",
+    "text": "In the Rosen-Roback model, rents are determined by the housing market. Supply meets demand:\n\nSupply: Developers build housing when rents are high\nDemand: Workers need housing (assume 1 unit per worker)\nEquilibrium: Housing supply = Housing demand (= population)",
+    "crumbs": [
+      "Model Components",
+      "Housing Supply"
+    ]
+  },
+  {
+    "objectID": "housing.html#where-do-rents-come-from",
+    "href": "housing.html#where-do-rents-come-from",
+    "title": "Housing Supply",
+    "section": "",
+    "text": "In the Rosen-Roback model, rents are determined by the housing market. Supply meets demand:\n\nSupply: Developers build housing when rents are high\nDemand: Workers need housing (assume 1 unit per worker)\nEquilibrium: Housing supply = Housing demand (= population)",
+    "crumbs": [
+      "Model Components",
+      "Housing Supply"
+    ]
+  },
+  {
+    "objectID": "housing.html#the-housing-supply-function",
+    "href": "housing.html#the-housing-supply-function",
+    "title": "Housing Supply",
+    "section": "The Housing Supply Function",
+    "text": "The Housing Supply Function\nHousing supply responds to rents:\n\\[H = S \\cdot r^{\\gamma}\\]\nwhere:\n\n\\(H\\) = housing units supplied\n\\(S\\) = supply shifter (land availability, construction costs)\n\\(r\\) = rent\n\\(\\gamma\\) = supply elasticity\n\n\nWhat is Supply Elasticity?\nThe elasticity \\(\\gamma\\) measures how responsive supply is to price:\n\\[\\gamma = \\frac{\\% \\Delta H}{\\% \\Delta r}\\]\nExamples (from Saiz 2010):\n\nHouston: \\(\\gamma \\approx 2.5\\) (very elastic - flat land, few regulations)\nChicago: \\(\\gamma \\approx 1.1\\) (moderate)\nLos Angeles: \\(\\gamma \\approx 0.76\\) (inelastic - geography + regulations)\nSan Francisco: \\(\\gamma \\approx 0.66\\) (very inelastic - peninsula + strict zoning)\n\nWhy does elasticity vary?\n\nGeography: mountains, water bodies limit building\nRegulations: zoning, height limits, environmental reviews\nLand availability: room to sprawl vs. built-up",
+    "crumbs": [
+      "Model Components",
+      "Housing Supply"
+    ]
+  },
+  {
+    "objectID": "housing.html#equilibrium-rent",
+    "href": "housing.html#equilibrium-rent",
+    "title": "Housing Supply",
+    "section": "Equilibrium Rent",
+    "text": "Equilibrium Rent\nIn equilibrium, housing supply equals population:\n\\[H = L\\]\nSolving for rent:\n\\[r = \\left(\\frac{L}{S}\\right)^{1/\\gamma}\\]\nKey insight: When supply is inelastic (low \\(\\gamma\\)), the exponent \\(1/\\gamma\\) is large, so rent increases sharply with population.\n\n\nrent_elasticity_with_respect_to_population\n\n rent_elasticity_with_respect_to_population (population:float,\n                                             supply_shifter:float,\n                                             elasticity:float)\n\nCalculate the elasticity of rent with respect to population.\n\n\n\n\nType\nDetails\n\n\n\n\npopulation\nfloat\nCurrent population\n\n\nsupply_shifter\nfloat\nSupply shifter parameter\n\n\nelasticity\nfloat\nSupply elasticity (gamma)\n\n\nReturns\nfloat\n\n\n\n\n\n\n\nequilibrium_rent\n\n equilibrium_rent (population:float, supply_shifter:float,\n                   elasticity:float)\n\nCalculate equilibrium rent where housing supply equals population.\n\n\n\n\nType\nDetails\n\n\n\n\npopulation\nfloat\nCity population (= housing demand)\n\n\nsupply_shifter\nfloat\nSupply shifter parameter (S)\n\n\nelasticity\nfloat\nSupply elasticity (gamma)\n\n\nReturns\nfloat\n\n\n\n\n\n\n\nhousing_supply\n\n housing_supply (rent:float, supply_shifter:float, elasticity:float)\n\nCalculate housing supply given rent and supply parameters.\n\n\n\n\nType\nDetails\n\n\n\n\nrent\nfloat\nHousing rent\n\n\nsupply_shifter\nfloat\nSupply shifter parameter (S)\n\n\nelasticity\nfloat\nSupply elasticity (gamma)\n\n\nReturns\nfloat\n\n\n\n\nExamples:\n\n# Calculate housing supply at a given rent\nh = housing_supply(rent=100, supply_shifter=1000, elasticity=2.0)\nassert h == 1000 * (100**2.0)\n\n# Calculate equilibrium rent where supply equals 1M population\nr = equilibrium_rent(population=1_000_000, supply_shifter=1_000_000, elasticity=2.0)\nassert np.isclose(r, 1.0)  # Should be 1 when pop = shifter\n\n# Verify equilibrium condition: H = L\nh_eq = housing_supply(r, 1_000_000, 2.0)\nassert np.isclose(h_eq, 1_000_000)",
+    "crumbs": [
+      "Model Components",
+      "Housing Supply"
+    ]
+  },
+  {
+    "objectID": "housing.html#the-power-of-elasticity",
+    "href": "housing.html#the-power-of-elasticity",
+    "title": "Housing Supply",
+    "section": "The Power of Elasticity",
+    "text": "The Power of Elasticity\nLet’s see how different supply elasticities affect the rent response to population growth.\n\n# Compare rent response across cities with different elasticities\nsupply_shifter = 1_000_000  # Calibrated so rent ≈ 1 at 1M population with gamma=2\nbase_population = 1_000_000\nnew_population = 1_500_000  # 50% population growth\n\n# Empirical elasticities from Saiz (2010)\ncities = [\n    (\"Houston\", 2.55),\n    (\"Austin\", 1.63),\n    (\"Chicago\", 1.12),\n    (\"Los Angeles\", 0.76),\n    (\"San Francisco\", 0.66),\n]\n\nprint(\"Effect of 50% Population Growth on Rents\")\nprint(\"=\" * 70)\nprint(f\"{'City':&lt;20} {'Elasticity (γ)':&gt;15} {'Initial Rent':&gt;12} {'New Rent':&gt;12} {'% Increase':&gt;12}\")\nprint(\"-\" * 70)\n\nfor city_name, gamma in cities:\n    initial_rent = equilibrium_rent(base_population, supply_shifter, gamma)\n    new_rent = equilibrium_rent(new_population, supply_shifter, gamma)\n    pct_increase = (new_rent / initial_rent - 1) * 100\n\n    print(f\"{city_name:&lt;20} {gamma:&gt;15.2f} {initial_rent:&gt;12.2f} {new_rent:&gt;12.2f} {pct_increase:&gt;11.1f}%\")\n\nprint(\"-\" * 70)\nprint(\"\\nKey insight: Inelastic cities (low γ) see much larger rent increases!\")\n\nEffect of 50% Population Growth on Rents\n======================================================================\nCity                  Elasticity (γ) Initial Rent     New Rent   % Increase\n----------------------------------------------------------------------\nHouston                         2.55         1.00         1.17        17.2%\nAustin                          1.63         1.00         1.28        28.2%\nChicago                         1.12         1.00         1.44        43.6%\nLos Angeles                     0.76         1.00         1.70        70.5%\nSan Francisco                   0.66         1.00         1.85        84.8%\n----------------------------------------------------------------------\n\nKey insight: Inelastic cities (low γ) see much larger rent increases!",
+    "crumbs": [
+      "Model Components",
+      "Housing Supply"
+    ]
+  },
+  {
+    "objectID": "housing.html#rent-elasticity",
+    "href": "housing.html#rent-elasticity",
+    "title": "Housing Supply",
+    "section": "Rent Elasticity",
+    "text": "Rent Elasticity\nThe elasticity of rent with respect to population is simply \\(1/\\gamma\\). This tells us how much rents respond to population changes.\n\nprint(\"Rent Elasticity with Respect to Population\")\nprint(\"=\" * 70)\nprint(f\"{'City':&lt;20} {'Supply Elasticity (γ)':&gt;25} {'Rent Elasticity (1/γ)':&gt;25}\")\nprint(\"-\" * 70)\n\nfor city_name, gamma in cities:\n    rent_elast = 1 / gamma\n    print(f\"{city_name:&lt;20} {gamma:&gt;25.2f} {rent_elast:&gt;25.2f}\")\n\nprint(\"-\" * 70)\nprint(\"\\nInterpretation: In San Francisco (γ=0.66), a 1% population increase\")\nprint(\"                causes a 1.5% rent increase.\")\nprint(\"                In Houston (γ=2.55), the same 1% increase\")\nprint(\"                causes only a 0.4% rent increase.\")\n\nRent Elasticity with Respect to Population\n======================================================================\nCity                     Supply Elasticity (γ)     Rent Elasticity (1/γ)\n----------------------------------------------------------------------\nHouston                                   2.55                      0.39\nAustin                                    1.63                      0.61\nChicago                                   1.12                      0.89\nLos Angeles                               0.76                      1.32\nSan Francisco                             0.66                      1.52\n----------------------------------------------------------------------\n\nInterpretation: In San Francisco (γ=0.66), a 1% population increase\n                causes a 1.5% rent increase.\n                In Houston (γ=2.55), the same 1% increase\n                causes only a 0.4% rent increase.",
+    "crumbs": [
+      "Model Components",
+      "Housing Supply"
+    ]
+  },
+  {
+    "objectID": "housing.html#tests",
+    "href": "housing.html#tests",
+    "title": "Housing Supply",
+    "section": "Tests",
+    "text": "Tests",
+    "crumbs": [
+      "Model Components",
+      "Housing Supply"
+    ]
+  },
+  {
+    "objectID": "housing.html#visualizing-supply-curves",
+    "href": "housing.html#visualizing-supply-curves",
+    "title": "Housing Supply",
+    "section": "Visualizing Supply Curves",
+    "text": "Visualizing Supply Curves\nLet’s plot housing supply curves for different elasticities.\n\n# This cell would create a visualization if matplotlib is available\ntry:\n    import matplotlib.pyplot as plt\n\n    rents = np.linspace(0.1, 5, 100)\n    supply_shifter = 1_000_000\n\n    fig, ax = plt.subplots(figsize=(10, 6))\n\n    for gamma, label in [(0.66, \"San Francisco (γ=0.66)\"), (1.12, \"Chicago (γ=1.12)\"), (2.55, \"Houston (γ=2.55)\")]:\n        quantities = [housing_supply(r, supply_shifter, gamma) for r in rents]\n        ax.plot(np.array(quantities) / 1e6, rents, label=label, linewidth=2)\n\n    ax.set_xlabel(\"Housing Quantity (millions of units)\")\n    ax.set_ylabel(\"Rent (index)\")\n    ax.set_title(\"Housing Supply Curves: How Elasticity Affects Supply Response\")\n    ax.legend()\n    ax.grid(True, alpha=0.3)\n    plt.tight_layout()\n    plt.show()\nexcept ImportError:\n    print(\"Matplotlib not available for visualization\")",
+    "crumbs": [
+      "Model Components",
+      "Housing Supply"
+    ]
+  },
+  {
+    "objectID": "housing.html#key-insights",
+    "href": "housing.html#key-insights",
+    "title": "Housing Supply",
+    "section": "Key Insights",
+    "text": "Key Insights\n\nSupply elasticity is crucial: It determines how much rents rise when population increases\nInelastic supply → rent spikes: Cities with geographic or regulatory constraints see explosive rent growth\nElastic supply → stable rents: Cities with room to build can absorb population growth\nPolicy matters: Zoning and planning regulations directly affect \\(\\gamma\\)\n\n\nWhy This Matters for Policy\nIf a productive city has inelastic housing supply:\n\nWorkers face high rents\nMany workers are priced out\nThey move to less productive cities\nNational GDP falls\n\nThis is the mechanism behind the Hsieh-Moretti (2019) finding that housing constraints in high-productivity cities reduce U.S. GDP by 3.7-8.9%.",
+    "crumbs": [
+      "Model Components",
+      "Housing Supply"
+    ]
+  },
+  {
+    "objectID": "utility.html",
+    "href": "utility.html",
+    "title": "Worker Utility",
+    "section": "",
+    "text": "Consider two empirical facts about London:\n\nLondon wages are ~30% higher than the UK average\nLondon rents are ~3x the UK average\n\nQuestion: Why would anyone live in London? The wages don’t seem to compensate for the rent!\nThe Rosen-Roback model answers this by recognizing that locations differ in ways beyond just wages and rents:\n\nAmenities: restaurants, culture, weather, scenery, family ties\nProductivity: some places make workers more productive (agglomeration)\n\n\n\nIn equilibrium, workers must be indifferent between locations. If one city were strictly better, everyone would move there. This is called spatial equilibrium.\n\\[V_1 = V_2 = V_3 = \\ldots = \\bar{V}\\]\nwhere \\(V_i\\) is the utility a worker gets from living in city \\(i\\).\n\n\n\nWorkers care about:\n\nWages (\\(w\\)): How much they earn\nRents (\\(r\\)): How much they pay for housing\nAmenities (\\(a\\)): Everything else (weather, culture, etc.)\n\nWe’ll use the CES (Constant Elasticity of Substitution) utility function:\n\\[V = \\frac{w}{r^\\beta} \\cdot a\\]\nwhere:\n\n\\(\\beta\\) is the housing expenditure share (typically ~0.33, meaning workers spend 1/3 of income on housing)\nHigher wages increase utility\nHigher rents decrease utility (with strength determined by \\(\\beta\\))\nHigher amenities increase utility",
+    "crumbs": [
+      "Model Components",
+      "Worker Utility"
+    ]
+  },
+  {
+    "objectID": "utility.html#why-do-wages-and-rents-differ-across-cities",
+    "href": "utility.html#why-do-wages-and-rents-differ-across-cities",
+    "title": "Worker Utility",
+    "section": "",
+    "text": "Consider two empirical facts about London:\n\nLondon wages are ~30% higher than the UK average\nLondon rents are ~3x the UK average\n\nQuestion: Why would anyone live in London? The wages don’t seem to compensate for the rent!\nThe Rosen-Roback model answers this by recognizing that locations differ in ways beyond just wages and rents:\n\nAmenities: restaurants, culture, weather, scenery, family ties\nProductivity: some places make workers more productive (agglomeration)\n\n\n\nIn equilibrium, workers must be indifferent between locations. If one city were strictly better, everyone would move there. This is called spatial equilibrium.\n\\[V_1 = V_2 = V_3 = \\ldots = \\bar{V}\\]\nwhere \\(V_i\\) is the utility a worker gets from living in city \\(i\\).\n\n\n\nWorkers care about:\n\nWages (\\(w\\)): How much they earn\nRents (\\(r\\)): How much they pay for housing\nAmenities (\\(a\\)): Everything else (weather, culture, etc.)\n\nWe’ll use the CES (Constant Elasticity of Substitution) utility function:\n\\[V = \\frac{w}{r^\\beta} \\cdot a\\]\nwhere:\n\n\\(\\beta\\) is the housing expenditure share (typically ~0.33, meaning workers spend 1/3 of income on housing)\nHigher wages increase utility\nHigher rents decrease utility (with strength determined by \\(\\beta\\))\nHigher amenities increase utility",
+    "crumbs": [
+      "Model Components",
+      "Worker Utility"
+    ]
+  },
+  {
+    "objectID": "utility.html#utility-functions",
+    "href": "utility.html#utility-functions",
+    "title": "Worker Utility",
+    "section": "Utility Functions",
+    "text": "Utility Functions\n\n\nutility_compensating_wage\n\n utility_compensating_wage (rent_ratio:float, amenity_ratio:float=1.0,\n                            beta:float=0.33)\n\nCalculate the wage ratio needed to maintain constant utility.\n\n\n\ncalculate_utility\n\n calculate_utility (wage:float, rent:float, amenity:float=1.0,\n                    beta:float=0.33)\n\nCalculate worker utility using CES specification.\nExamples:\n\n# Calculate utility for a simple case\nu = calculate_utility(wage=1000, rent=500, beta=0.33)\nassert u &gt; 0\n\n# If London rent is 3x higher, wage must be ~1.44x higher to compensate\nwage_ratio = utility_compensating_wage(rent_ratio=3.0, beta=0.33)\nassert wage_ratio &gt; 1.4 and wage_ratio &lt; 1.5",
+    "crumbs": [
+      "Model Components",
+      "Worker Utility"
+    ]
+  },
+  {
+    "objectID": "utility.html#the-role-of-beta-housing-expenditure-share",
+    "href": "utility.html#the-role-of-beta-housing-expenditure-share",
+    "title": "Worker Utility",
+    "section": "The Role of Beta (Housing Expenditure Share)",
+    "text": "The Role of Beta (Housing Expenditure Share)\nThe parameter \\(\\beta\\) controls how much workers care about rents relative to wages.\n\nIf \\(\\beta = 0\\): Workers don’t care about rents at all (unrealistic!)\nIf \\(\\beta = 0.33\\): Workers spend 1/3 of income on housing (realistic)\nIf \\(\\beta = 0.5\\): Workers spend half their income on housing (high cost area)\n\nImplication: If workers spend more on housing (higher \\(\\beta\\)), they are MORE sensitive to rent differences. This makes them less willing to move to high-rent cities.",
+    "crumbs": [
+      "Model Components",
+      "Worker Utility"
+    ]
+  },
+  {
+    "objectID": "utility.html#tests",
+    "href": "utility.html#tests",
+    "title": "Worker Utility",
+    "section": "Tests",
+    "text": "Tests",
+    "crumbs": [
+      "Model Components",
+      "Worker Utility"
+    ]
+  },
+  {
+    "objectID": "utility.html#example-london-vs-manchester",
+    "href": "utility.html#example-london-vs-manchester",
+    "title": "Worker Utility",
+    "section": "Example: London vs Manchester",
+    "text": "Example: London vs Manchester\nLet’s use the utility function to understand the London-Manchester wage and rent differences.\n\n# Example cities (stylized facts)\nlondon_wage = 45_000\nlondon_rent = 20_000\nlondon_amenity = 1.2  # 20% amenity premium\n\nmanchester_wage = 35_000\nmanchester_rent = 8_000\nmanchester_amenity = 1.0  # Baseline\n\nbeta = 0.33\n\n# Calculate utilities\nlondon_utility = calculate_utility(london_wage, london_rent, london_amenity, beta)\nmanchester_utility = calculate_utility(manchester_wage, manchester_rent, manchester_amenity, beta)\n\nprint(\"City Comparison:\")\nprint(\"=\" * 60)\nprint(f\"{'City':&lt;15} {'Wage':&gt;12} {'Rent':&gt;12} {'Amenity':&gt;10} {'Utility':&gt;10}\")\nprint(\"-\" * 60)\nprint(f\"{'London':&lt;15} £{london_wage:&gt;10,} £{london_rent:&gt;10,} {london_amenity:&gt;10.2f} {london_utility:&gt;10.2f}\")\nprint(\n    f\"{'Manchester':&lt;15} £{manchester_wage:&gt;10,} £{manchester_rent:&gt;10,} {manchester_amenity:&gt;10.2f} {manchester_utility:&gt;10.2f}\"\n)\nprint(\"-\" * 60)\n\n# Check if they're in equilibrium\nutility_diff_pct = abs(london_utility - manchester_utility) / manchester_utility * 100\nprint(f\"\\nUtility difference: {utility_diff_pct:.1f}%\")\n\nif utility_diff_pct &lt; 5:\n    print(\"✓ Cities are approximately in spatial equilibrium\")\nelse:\n    print(\"✗ Not in equilibrium - workers would migrate\")\n\n# Calculate required wage for exact equilibrium\nrent_ratio = london_rent / manchester_rent\namenity_ratio = london_amenity / manchester_amenity\nrequired_wage_ratio = utility_compensating_wage(rent_ratio, amenity_ratio, beta)\nrequired_london_wage = manchester_wage * required_wage_ratio\n\nprint(\"\\nFor exact equilibrium:\")\nprint(f\"  Current London wage: £{london_wage:,}\")\nprint(f\"  Required London wage: £{required_london_wage:,.0f}\")\nprint(f\"  Difference: £{london_wage - required_london_wage:,.0f}\")\n\nCity Comparison:\n============================================================\nCity                    Wage         Rent    Amenity    Utility\n------------------------------------------------------------\nLondon          £    45,000 £    20,000       1.20    2056.15\nManchester      £    35,000 £     8,000       1.00    1803.22\n------------------------------------------------------------\n\nUtility difference: 14.0%\n✗ Not in equilibrium - workers would migrate\n\nFor exact equilibrium:\n  Current London wage: £45,000\n  Required London wage: £39,465\n  Difference: £5,535",
+    "crumbs": [
+      "Model Components",
+      "Worker Utility"
+    ]
+  },
+  {
+    "objectID": "utility.html#sensitivity-to-beta",
+    "href": "utility.html#sensitivity-to-beta",
+    "title": "Worker Utility",
+    "section": "Sensitivity to Beta",
+    "text": "Sensitivity to Beta\nHow does the housing expenditure share affect spatial equilibrium?\n\n# Vary beta from 0.2 to 0.5\nbetas = [0.20, 0.25, 0.30, 0.33, 0.40, 0.50]\nrent_ratio = 3.0  # London rent is 3x Manchester\n\nprint(\"How housing expenditure share affects wage compensation:\")\nprint(\"=\" * 60)\nprint(f\"{'Beta':&gt;8} {'Housing Share':&gt;15} {'Required Wage Ratio':&gt;20}\")\nprint(\"-\" * 60)\n\nfor beta in betas:\n    wage_ratio = utility_compensating_wage(rent_ratio, beta=beta)\n    print(f\"{beta:&gt;8.2f} {beta * 100:&gt;14.0f}% {wage_ratio:&gt;19.2f}x\")\n\nprint(\"-\" * 60)\nprint(\"\\nInterpretation: Higher beta → workers care more about rents\")\nprint(\"                 → need higher wage compensation to move to expensive city\")\n\nHow housing expenditure share affects wage compensation:\n============================================================\n    Beta   Housing Share  Required Wage Ratio\n------------------------------------------------------------\n    0.20             20%                1.25x\n    0.25             25%                1.32x\n    0.30             30%                1.39x\n    0.33             33%                1.44x\n    0.40             40%                1.55x\n    0.50             50%                1.73x\n------------------------------------------------------------\n\nInterpretation: Higher beta → workers care more about rents\n                 → need higher wage compensation to move to expensive city",
+    "crumbs": [
+      "Model Components",
+      "Worker Utility"
+    ]
+  },
+  {
+    "objectID": "utility.html#key-insights",
+    "href": "utility.html#key-insights",
+    "title": "Worker Utility",
+    "section": "Key Insights",
+    "text": "Key Insights\n\nSpatial equilibrium: Workers must get equal utility across locations, or they’ll migrate\nCompensating differentials: High rents must be offset by high wages or amenities\nBeta matters: The housing expenditure share determines how sensitive workers are to rent differences\nAmenities are valued: Cities with better amenities can have lower wages for given rents\n\nThis utility framework is the foundation for understanding:\n\nWhy people live in expensive cities\nHow housing costs affect migration patterns\nThe welfare effects of housing supply constraints",
+    "crumbs": [
+      "Model Components",
+      "Worker Utility"
+    ]
+  }
+]

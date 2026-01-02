@@ -1,0 +1,25 @@
+website:
+  sidebar:
+    contents:
+      - section: "Overview"
+        contents:
+          - text: "Introduction"
+            href: index.html
+          - text: "Core Utilities"
+            href: core.html
+      - section: "Model Components"
+        contents:
+          - text: "Parameters"
+            href: parameters.html
+          - text: "Worker Utility"
+            href: utility.html
+          - text: "Housing Supply"
+            href: housing.html
+          - text: "Firm Production"
+            href: production.html
+      - section: "Equilibrium"
+        contents:
+          - text: "Equilibrium Solver"
+            href: equilibrium.html
+          - text: "Model API"
+            href: model.html

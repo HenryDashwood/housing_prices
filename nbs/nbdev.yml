@@ -1,0 +1,9 @@
+project:
+  output-dir: docs
+
+website:
+  title: "src"
+  site-url: "https://henrydashwood.github.io/housing_prices"
+  description: "Urban economics spatial equilibrium models"
+  repo-branch: master
+  repo-url: "https://github.com/henrydashwood/housing_prices"

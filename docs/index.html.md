@@ -27,11 +27,32 @@ We provide:
 The **Rosen-Roback model** is the workhorse of urban economics. It
 explains how workers and firms sort across cities based on:
 
-| Factor        | Effect                                                  |
-|---------------|---------------------------------------------------------|
-| **Wages**     | Higher in productive cities (pulls workers in)          |
-| **Rents**     | Higher where demand exceeds supply (pushes workers out) |
-| **Amenities** | Weather, culture, safety (pulls workers to nice places) |
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Factor</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Wages</strong></td>
+<td>Higher in productive cities (pulls workers in)</td>
+</tr>
+<tr class="even">
+<td><strong>Rents</strong></td>
+<td>Higher where demand exceeds supply (pushes workers out)</td>
+</tr>
+<tr class="odd">
+<td><strong>Amenities</strong></td>
+<td>Weather, culture, safety (pulls workers to nice places)</td>
+</tr>
+</tbody>
+</table>
 
 In **spatial equilibrium**, workers are indifferent between
 locations—any advantage in one dimension is offset by disadvantages in
@@ -110,25 +131,82 @@ print(f"  After:  {counterfactual.population[0]:,.0f}")
 
 The model is built from composable pieces:
 
-| Module                        | Description                                                  |
-|-------------------------------|--------------------------------------------------------------|
-| [Parameters](parameters.html) | Model parameters, city parameters, and result containers     |
-| [Utility](utility.html)       | Worker utility functions and spatial indifference conditions |
-| [Housing](housing.html)       | Housing supply curves and rent determination                 |
-| [Production](production.html) | Firm production with agglomeration externalities             |
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="parameters.html">Parameters</a></td>
+<td>Model parameters, city parameters, and result containers</td>
+</tr>
+<tr class="even">
+<td><a href="utility.html">Utility</a></td>
+<td>Worker utility functions and spatial indifference conditions</td>
+</tr>
+<tr class="odd">
+<td><a href="housing.html">Housing</a></td>
+<td>Housing supply curves and rent determination</td>
+</tr>
+<tr class="even">
+<td><a href="production.html">Production</a></td>
+<td>Firm production with agglomeration externalities</td>
+</tr>
+</tbody>
+</table>
 
 ### Equilibrium & API
 
-| Module                                 | Description                                         |
-|----------------------------------------|-----------------------------------------------------|
-| [Equilibrium Solver](equilibrium.html) | Iterative algorithm for finding spatial equilibrium |
-| [Model API](model.html)                | High-level interface for running analyses           |
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="equilibrium.html">Equilibrium Solver</a></td>
+<td>Iterative algorithm for finding spatial equilibrium</td>
+</tr>
+<tr class="even">
+<td><a href="model.html">Model API</a></td>
+<td>High-level interface for running analyses</td>
+</tr>
+</tbody>
+</table>
 
 ### Utilities
 
-| Module                      | Description                                       |
-|-----------------------------|---------------------------------------------------|
-| [Core Utilities](core.html) | Path helpers, downloads, geographic code handling |
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="core.html">Core Utilities</a></td>
+<td>Path helpers, downloads, geographic code handling</td>
+</tr>
+</tbody>
+</table>
 
 ## Installation
 

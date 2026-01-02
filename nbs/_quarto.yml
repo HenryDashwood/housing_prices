@@ -1,0 +1,30 @@
+project:
+  type: website
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    keep-md: true
+    include-in-header:
+      - text: |
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    highlight-style: github
+    code-copy: true
+    code-overflow: wrap
+  commonmark: default
+
+website:
+  twitter-card: true
+  open-graph: true
+  repo-actions: [issue]
+  navbar:
+    background: primary
+    search: true
+  sidebar:
+    style: docked
+
+metadata-files: [nbdev.yml, sidebar.yml]

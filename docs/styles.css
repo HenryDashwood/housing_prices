@@ -1,0 +1,535 @@
+/* ==========================================================================
+   Housing Prices Docs — Warm Amber Theme
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Custom Properties
+   -------------------------------------------------------------------------- */
+:root {
+  /* Brand colors */
+  --amber-100: #fef3c7;
+  --amber-200: #fde68a;
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --amber-700: #b45309;
+  --amber-800: #92400e;
+  --amber-900: #78350f;
+
+  /* Neutral tones */
+  --stone-50: #fafaf9;
+  --stone-100: #f5f5f4;
+  --stone-200: #e7e5e4;
+  --stone-300: #d6d3d1;
+  --stone-400: #a8a29e;
+  --stone-500: #78716c;
+  --stone-600: #57534e;
+  --stone-700: #44403c;
+  --stone-800: #292524;
+  --stone-900: #1c1917;
+
+  /* Code block palette */
+  --code-bg: #fdfbf7;
+  --code-border: #e8dcc8;
+  --code-text: #3d3227;
+  --output-bg: #f7f4ef;
+  --output-border: #d4a574;
+
+  /* Syntax highlighting — warm amber scheme */
+  --syntax-keyword: #9d4e15;
+  --syntax-string: #4d7c0f;
+  --syntax-number: #b45309;
+  --syntax-function: #6d28d9;
+  --syntax-class: #0369a1;
+  --syntax-comment: #8b7355;
+  --syntax-operator: #64748b;
+  --syntax-variable: #78350f;
+  --syntax-import: #0e7490;
+  --syntax-builtin: #7c3aed;
+
+  /* Fonts */
+  --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", ui-monospace, monospace;
+}
+
+/* --------------------------------------------------------------------------
+   Base Layout
+   -------------------------------------------------------------------------- */
+body {
+  background-color: #fae9ca;
+  color: var(--stone-800);
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* --------------------------------------------------------------------------
+   Navigation
+   -------------------------------------------------------------------------- */
+nav.navbar {
+  background: linear-gradient(135deg, #faac1a 0%, #f59e0b 100%);
+  border-bottom: 3px solid var(--amber-600);
+  box-shadow: 0 2px 8px rgba(120, 53, 15, 0.15);
+}
+
+nav.navbar.navbar-dark .navbar-brand,
+nav.navbar .navbar-brand {
+  color: var(--stone-900);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+nav.navbar .navbar-nav .nav-link {
+  color: var(--stone-800);
+  font-weight: 500;
+}
+
+nav.navbar .navbar-nav .nav-link:hover {
+  color: var(--stone-900);
+}
+
+/* --------------------------------------------------------------------------
+   Sidebar
+   -------------------------------------------------------------------------- */
+#quarto-sidebar {
+  background-color: #fae9ca;
+  border-right: 1px solid var(--code-border);
+}
+
+#quarto-sidebar .sidebar-item a {
+  color: var(--stone-700);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+#quarto-sidebar .sidebar-item a:hover {
+  color: var(--amber-700);
+  background-color: rgba(251, 191, 36, 0.15);
+}
+
+#quarto-sidebar .sidebar-item.active > a {
+  color: var(--amber-800);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Code Cells — Container
+   -------------------------------------------------------------------------- */
+.cell {
+  margin-bottom: 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Source Code Blocks
+   -------------------------------------------------------------------------- */
+div.sourceCode {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(120, 53, 15, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+div.sourceCode pre.sourceCode {
+  background: transparent;
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+pre.sourceCode code {
+  font-family: var(--font-mono);
+  font-variant-ligatures: contextual;
+  letter-spacing: -0.01em;
+}
+
+/* Cell marker — subtle "In []:" indicator styling */
+.cell > .sourceCode {
+  position: relative;
+  margin-bottom: 0;
+}
+
+.cell > .sourceCode::before {
+  content: "›";
+  position: absolute;
+  left: 0.5rem;
+  top: 1rem;
+  color: var(--amber-500);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+.cell > .sourceCode pre.sourceCode {
+  padding-left: 1.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   Code Output
+   -------------------------------------------------------------------------- */
+.cell-output,
+.cell-output-stdout,
+.cell-output-display {
+  margin-top: -1px;
+}
+
+.cell-output > pre,
+.cell-output > .sourceCode > pre,
+.cell-output-stdout > pre {
+  background: var(--output-bg);
+  border: 1px solid var(--code-border);
+  border-top: none;
+  border-left: 4px solid var(--output-border);
+  border-radius: 0 0 8px 8px;
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--stone-600);
+}
+
+.cell-output > .sourceCode {
+  border: none;
+  background: none;
+}
+
+/* When output follows code, connect them visually */
+.cell > .sourceCode + .cell-output > pre,
+.cell > .sourceCode + .cell-output-stdout > pre {
+  border-top: 1px dashed var(--code-border);
+}
+
+.cell > .sourceCode {
+  border-radius: 8px 8px 0 0;
+}
+
+.cell > .sourceCode + .cell-output .sourceCode,
+.cell > .sourceCode + .cell-output-stdout + .cell-output .sourceCode {
+  border-radius: 0 0 8px 8px;
+}
+
+/* Standalone output (no preceding code) */
+.cell-output:first-child > pre {
+  border-radius: 8px;
+  border-top: 1px solid var(--code-border);
+  border-left: 4px solid var(--output-border);
+}
+
+/* --------------------------------------------------------------------------
+   Syntax Highlighting — Warm Amber Theme
+   -------------------------------------------------------------------------- */
+
+/* Reset default colors */
+pre > code.sourceCode > span,
+code span,
+code.sourceCode > span,
+div.sourceCode,
+div.sourceCode pre.sourceCode {
+  color: var(--code-text);
+}
+
+/* Keywords: from, import, if, else, for, while, def, class, return, etc. */
+code span.kw,
+code span.cf {
+  color: var(--syntax-keyword);
+  font-weight: 600;
+}
+
+/* Strings */
+code span.st,
+code span.ch,
+code span.vs,
+code span.ss {
+  color: var(--syntax-string);
+}
+
+/* Numbers */
+code span.dv,
+code span.bn,
+code span.fl {
+  color: var(--syntax-number);
+}
+
+/* Functions */
+code span.fu {
+  color: var(--syntax-function);
+}
+
+/* Built-ins */
+code span.bu {
+  color: var(--syntax-builtin);
+}
+
+/* Data types / Classes */
+code span.dt {
+  color: var(--syntax-class);
+  font-weight: 500;
+}
+
+/* Variables */
+code span.va {
+  color: var(--syntax-variable);
+}
+
+/* Imports */
+code span.im {
+  color: var(--syntax-import);
+}
+
+/* Comments */
+code span.co,
+code span.do {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+/* Operators */
+code span.op,
+code span.ot {
+  color: var(--syntax-operator);
+}
+
+/* Attributes */
+code span.at {
+  color: var(--amber-700);
+}
+
+/* Errors / Alerts */
+code span.er,
+code span.al {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* Annotations / Decorators */
+code span.an {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+/* Preprocessor */
+code span.pp {
+  color: var(--syntax-keyword);
+}
+
+/* Constants */
+code span.cn {
+  color: var(--amber-600);
+  font-weight: 500;
+}
+
+/* Warning */
+code span.wa {
+  color: #ca8a04;
+  font-style: italic;
+}
+
+/* Special characters */
+code span.sc {
+  color: var(--syntax-string);
+}
+
+/* --------------------------------------------------------------------------
+   Inline Code
+   -------------------------------------------------------------------------- */
+:not(pre) > code {
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--amber-800);
+}
+
+/* --------------------------------------------------------------------------
+   Copy Button
+   -------------------------------------------------------------------------- */
+.code-copy-button {
+  background: var(--amber-100);
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  color: var(--stone-500);
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color 0.15s ease;
+}
+
+div.sourceCode:hover .code-copy-button {
+  opacity: 1;
+}
+
+.code-copy-button:hover {
+  background: var(--amber-200);
+  color: var(--stone-700);
+}
+
+.code-copy-button:active {
+  background: var(--amber-300);
+}
+
+/* --------------------------------------------------------------------------
+   Tables (for output)
+   -------------------------------------------------------------------------- */
+.cell-output table,
+.cell-output-display table {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.cell-output table th,
+.cell-output-display table th {
+  background: var(--amber-100);
+  border: 1px solid var(--code-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--stone-700);
+}
+
+.cell-output table td,
+.cell-output-display table td {
+  border: 1px solid var(--code-border);
+  padding: 0.5rem 0.75rem;
+  background: var(--code-bg);
+}
+
+.cell-output table tr:hover td,
+.cell-output-display table tr:hover td {
+  background: var(--amber-50, #fffbeb);
+}
+
+/* --------------------------------------------------------------------------
+   Description Text
+   -------------------------------------------------------------------------- */
+div.description {
+  padding-left: 2px;
+  padding-top: 8px;
+  padding-bottom: 12px;
+  font-style: italic;
+  font-size: 1.125rem;
+  color: var(--stone-600);
+  border-bottom: 1px solid var(--code-border);
+  margin-bottom: 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Figures / Plots
+   -------------------------------------------------------------------------- */
+.cell-output-display img {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(120, 53, 15, 0.1);
+  border: 1px solid var(--code-border);
+}
+
+/* --------------------------------------------------------------------------
+   Blockquotes
+   -------------------------------------------------------------------------- */
+blockquote {
+  background: linear-gradient(
+    135deg,
+    var(--amber-100) 0%,
+    rgba(254, 243, 199, 0.5) 100%
+  );
+  border-left: 4px solid var(--amber-400);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  color: var(--stone-700);
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Content Tables
+   -------------------------------------------------------------------------- */
+.quarto-document table:not(.cell-output table) {
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  width: 100%;
+}
+
+.quarto-document table:not(.cell-output table) th {
+  background: var(--amber-100);
+  border: 1px solid var(--code-border);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--stone-800);
+}
+
+.quarto-document table:not(.cell-output table) td {
+  border: 1px solid var(--code-border);
+  padding: 0.75rem 1rem;
+  background: var(--code-bg);
+}
+
+.quarto-document table:not(.cell-output table) tr:hover td {
+  background: var(--amber-50, #fffbeb);
+}
+
+/* --------------------------------------------------------------------------
+   Links
+   -------------------------------------------------------------------------- */
+a {
+  color: var(--amber-700);
+  text-decoration: underline;
+  text-decoration-color: rgba(180, 83, 9, 0.3);
+  text-underline-offset: 2px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+a:hover {
+  color: var(--amber-800);
+  text-decoration-color: var(--amber-600);
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbar Styling (for code blocks)
+   -------------------------------------------------------------------------- */
+div.sourceCode pre.sourceCode::-webkit-scrollbar {
+  height: 8px;
+}
+
+div.sourceCode pre.sourceCode::-webkit-scrollbar-track {
+  background: var(--amber-100);
+  border-radius: 4px;
+}
+
+div.sourceCode pre.sourceCode::-webkit-scrollbar-thumb {
+  background: var(--amber-300);
+  border-radius: 4px;
+}
+
+div.sourceCode pre.sourceCode::-webkit-scrollbar-thumb:hover {
+  background: var(--amber-400);
+}
+
+/* --------------------------------------------------------------------------
+   Focus States (accessibility)
+   -------------------------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--amber-500);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Print Styles
+   -------------------------------------------------------------------------- */
+@media print {
+  div.sourceCode {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .cell-output > pre {
+    border-left-color: #999;
+  }
+}
